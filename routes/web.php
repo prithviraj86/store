@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ProductController@index')->name('home');
+Route::get('/product/create', 'ProductController@create')->middleware('auth');
+Route::post('/product/create', 'ProductController@store')->middleware('auth');
+
+Auth::routes();
+
+
