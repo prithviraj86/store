@@ -12,9 +12,11 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Cart $cart)
     {
         //
+        $cartdata=$cart->getCart();
+        return view('cart',compact('cartdata'));
     }
 
     /**
@@ -22,10 +24,6 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -36,10 +34,12 @@ class CartController extends Controller
     public function store(Request $request)
     {
         //
+        //echo "Hello";die;
+
 
         $cart=new Cart();
         $cart->addToCart($request);
-        redirect('/cart');
+        return redirect('/cart');
     }
 
     /**

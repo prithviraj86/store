@@ -8,7 +8,7 @@ class ProductImage extends Model
 {
     //
     protected $fillable = [
-        'image_link', 'small_image_link', 'thumb_image_link',
+        'product_id','image_link', 'small_image_link', 'thumb_image_link',
     ];
 
     public $timestamps = false;

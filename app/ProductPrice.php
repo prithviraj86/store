@@ -8,7 +8,7 @@ class ProductPrice extends Model
 {
     //
     protected $fillable = [
-        'price', 'special_price',
+        'product_id','price', 'special_price',
     ];
 
     public $timestamps = false;

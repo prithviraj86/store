@@ -8,7 +8,7 @@ class ProductDetail extends Model
 {
     //
     protected $fillable = [
-        'manufacturer', 'quantity', 'weight', 'description',
+        'product_id','manufacturer', 'quantity', 'weight', 'description',
     ];
 
     public $timestamps = false;

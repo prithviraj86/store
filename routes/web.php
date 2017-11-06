@@ -12,8 +12,12 @@
 */
 
 Route::get('/', 'ProductController@index')->name('home');
+Route::get('/product/show/{id}', 'ProductController@show');
 Route::get('/product/create', 'ProductController@create')->middleware('auth');
 Route::post('/product/create', 'ProductController@store')->middleware('auth');
+
+Route::get('/cart', 'CartController@index');
+Route::post('/cart/store', 'CartController@store');
 
 Auth::routes();
 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Cart;
 use App\Product;
-use App\User;
+
+
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,8 +17,9 @@ class ProductController extends Controller
      */
     public function index()
     {
+
         $products=Product::all();
-        print_r($products);die;
+
         return view('index',compact('products'));
     }
 
@@ -47,18 +50,23 @@ class ProductController extends Controller
             'sprice'=>'required|integer',
             'quantity'=>'required|integer',
         ]);
+        //$extension=$request->file('photo')->extension();
 
-        //$product=new Product();
+        //$request->file('photo')->storeAs('images',$filename,'public');
+
 
         $product->name=request('name');
         $product->admin_id=auth()->user()->id;
         $product->addProduct($product);
-
-//        $product->price=request('price');
-//        $product->sprice=request('sprice');
-
-        ;
-        echo $product->id;die;
+        if($product->id=='')
+        {
+            redirect('product/create');
+        }
+        else
+        {
+            redirect()->home();
+        }
+        return $product->id;
     }
 
     /**
@@ -69,9 +77,9 @@ class ProductController extends Controller
      */
     public function show(Product $product, Request $request)
     {
-        $productData=$product->getProducyByid($request);
+        $productdata=Product::find($request->id);
 
-        return view('products.show',compact('productData'));
+        return view('products.show',compact('productdata'));
     }
 
     /**

@@ -20,9 +20,14 @@ class Product extends Model
     {
         return $this->hasOne(ProductPrice::class);
     }
-    public function productImage()
+//    public function productImage()
+//    {
+//        return $this->hasOne(ProductImage::class);
+//    }
+
+    public function cart()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasOne(Cart::class);
     }
 
     public function addProduct(Product $product)
