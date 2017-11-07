@@ -4,9 +4,9 @@
         <div class="container">
 
             <div class="row">
-                <?php
-
-                ?>
+                @if($errors->any())
+                    <h4 style="color:red;">{{$errors->first()}}</h4>
+                @endif
                 <div class="card">
 
                     <h2>{{$productdata->name}}</h2>
@@ -34,6 +34,8 @@
                         <form action="/cart/store" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" value="{{$productdata->id}}" name="pid"/>
+                            <input type="hidden" value="{{$productdata->productprice->price}}" name="price"/>
+                            <input type="hidden" value="1" name="quantity"/>
                             <input type="submit" value="Add to cart" class="btn btn-primary" name="addcart"/>
                         </form>
 

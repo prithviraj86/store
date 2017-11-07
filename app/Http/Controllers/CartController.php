@@ -2,44 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Cart;
+use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    private $repository;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Cart $cart)
+    public function __construct(CartRepository $cartrepository)
     {
-        //
-        $cartdata=$cart->getCart();
-        return view('cart',compact('cartdata'));
+        $this->repository=$cartrepository;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function index()
+    {
+        //
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+        return View::make('index')->with('cartdata',$this->repository->getData());
+    }
+
+
     public function store(Request $request)
     {
         //
         //echo "Hello";die;
+            $result=$this->repository->addToCart($request);
+           if($request)
+           {
+               redirect('/cart');
+           }
+           else
+           {
+               Redirect::back()->withErrors(['msg', 'Product not added in cart']);
+           }
 
 
-        $cart=new Cart();
-        $cart->addToCart($request);
-        return redirect('/cart');
+
     }
 
     /**
