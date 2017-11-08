@@ -6,27 +6,27 @@ use App\Repositories\CartRepository;
 class SessionCart
 {
 
-   
+    public $cart_name='cart';
 
     public function getCart()
     {
-        return session('cart');
+        return session($this->cart_name);
 
     }
     public function getCartCount()
     {
 
-        return count(session('cart'));
+        return count(session($this->cart_name));
 
 
     }
-    public function addToCart(CartRepository $cartRepository)
+    public function addToCart(array $save_data)
     {
-        $cart=array();
         $cart_data=array();
-        $product_id = $cartRepository->getProductid();
-        $product_price = $cartRepository->getProductPrice();
-        $product_qty = $cartRepository->getProductQuantity();
+        $product_id    = $save_data['product_id'];
+        $product_name  = $save_data['name'];
+        $product_price = $save_data['price'];
+        $product_qty   = $save_data['quantity'];
 
         if(!isset($product_id ) OR $product_id== ''){
             return FALSE;
@@ -39,7 +39,7 @@ class SessionCart
             else
             {
 
-                $cart_data['price'] = $product_price;
+
 
                 if($product_qty == 0){
                     return FALSE;
@@ -59,23 +59,26 @@ class SessionCart
                 $old_qty=0;
                 }
 
+                $cart_data['name']  = $product_name;
                 $cart_data['product_id']  = $product_id;
                 $cart_data['quantity'] += $old_qty;
+                $cart_data['price'] = $product_price;
+                $cart_data['total_price'] = $product_price*$cart_data['quantity'];
 
-                if(session()->has('cart'))
+                if(session()->has($this->cart_name))
                 {
-                    if(session()->has('cart.'.$product_id))
+                    if(session()->has($this->cart_name.'.'.$product_id))
                     {
-                       session()->forget('cart.'.$product_id);
-                       session()->put('cart.'.$product_id,$cart_data);
+                       session()->forget($this->cart_name.'.'.$product_id);
+                       session()->put($this->cart_name.'.'.$product_id,$cart_data);
                     }
                     else
                     {
-                        session()->put('cart.'.$product_id,$cart_data);
+                        session()->put($this->cart_name.'.'.$product_id,$cart_data);
                     }
 
                 }else{
-                    session()->put('cart.'.$product_id,$cart_data);
+                    session()->put($this->cart_name.'.'.$product_id,$cart_data);
                 }
                 return true;
             }
@@ -83,24 +86,50 @@ class SessionCart
 
     }
 
-    public function updateCart()
+    public function updateCartQuantity(int $product_id,int $quantity)
+    {
+        $product_id=$product_id;
+        $quantity=$quantity;
+
+        $cart_data=$this->getCart();
+
+        $cart_data[$product_id]['quantity']=$quantity;
+        $cart_data[$product_id]['total_price']=$quantity*$cart_data[$product_id]['price'];
+        session()->put($this->cart_name,$cart_data);
+        $return_data=array('product_id'=>(int)$product_id,'total_price'=>$cart_data[$product_id]['total_price']);
+
+        return $this->getCartProductTotal($product_id,$quantity);
+
+    }
+    public function updateCartAfterLogin()
     {
 
     }
-    public function remove()
+    public function removeProduct($product_id)
     {
+        //print_r(session()->get($this->cart_name.".".$product_id));
+        session()->forget($this->cart_name.".".$product_id);
 
     }
-//    public function productExist($product_id)
-//    {
-//        $sessioncart=session()->get('cart');
-//        return array_key_exists($product_id,$sessioncart);
-//    }
-//    public function getProductQty($product_id)
-//    {
-//        $sessioncart=session()->get('cart');
-//        return $sessioncart[$product_id]['quantity'];
-//    }
+    public function getCartProductTotal($product_id,$quantity)
+    {
+        $cart_data=$this->getCart();
+        $return_data[]=array('product_id'=>(int)$product_id,'total_price'=>$quantity*$cart_data[$product_id]['price']);
+        return $return_data;
+
+    }
+    public function getCartTotal()
+    {
+        $cart_data=$this->getCart();
+        foreach($cart_data as $arr)
+        {
+            $result_data['product_id']=$arr['product_id'];
+            $result_data['total_name']=$arr['total_name'];
+        }
+        return $result_data;
+
+    }
+
 
 
 }

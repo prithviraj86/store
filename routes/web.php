@@ -18,6 +18,8 @@ Route::post('/product/create', 'ProductController@store')->middleware('auth');
 
 Route::get('/cart', 'CartController@index');
 Route::post('/cart/store', 'CartController@store');
+Route::post('/cart/update', 'CartController@update');
+Route::post('/cart/delete', 'CartController@destroy');
 
 Auth::routes();
 

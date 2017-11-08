@@ -17,8 +17,44 @@
     <link rel="stylesheet" href="/css/album.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!--JS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script>
+        function change_total(data)
+        {
+            $p_block="product_"+pid;
+        }
+       function  updatecart(pid,quantity)
+        {
 
+
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+
+                type:'POST',
+                url:"/cart/update",
+                dataType: 'JSON',
+                data: {
+                    "_method": 'POST',
+                    "_token": token,
+                    "product_id": pid,
+                    "quantity": quantity,
+                },
+                success:function(data){
+                    console.log('sucess');
+                    console.log(data);
+
+                    $("#table").load("data");
+                },
+                error:function(data){
+                    console.log('error');
+                    console.log(data);
+                    console.log(data.length);
+                    $("#table").load("data");
+                },
+            });
+        }
+    </script>
 </head>
 <body>
     <div id="app">

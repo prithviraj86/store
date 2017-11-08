@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use App\Repositories\CartRepository;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,21 +26,16 @@ class Cart extends Model
 
     }
 
-    public function addToCart(Cart $cart)
-    {
-
-        return $cart->save();
-
-    }
     public function getCart()
     {
         //echo $this->sesssion_id;die;
 
-            return static::selectRaw('name,price')
+            return static::selectRaw('carts.product_id,products.name,product_prices.price,carts.quantity,sum(carts.quantity*product_prices.price) as total_price')
                 ->join('products','carts.product_id','=','products.id')
                 ->join('product_prices','product_prices.product_id','=','products.id')
                 ->where('customer_id','=',auth()->user()->id)
-                ->get();
+                ->groupBy('carts.product_id','products.name','carts.quantity','product_prices.price')
+                ->get()->toArray();
 
 
     }
@@ -67,13 +63,41 @@ class Cart extends Model
 
 
     }
-    public function updateCartQty(Cart $cart)
+    public function updateCartQty(int $product_id,int $quantity)
     {
        // echo $cart->quanitty;die;
-        return static::query()
-            ->where('product_id','=',$cart->product_id)
+        //echo $cart_repository->getProductQuantity();die;
+         static::query()
+            ->where('product_id','=',$product_id)
             ->where('customer_id','=',auth()->user()->id)
-            ->update(['quantity' => $cart->quanitty]);
+            ->update(['quantity' => $quantity]);
+
+        return $this->getCartProductTotal($product_id);
+    }
+    public function deleteProduct($product_id)
+    {
+        return static::query()
+            ->where('product_id','=',$product_id)
+            ->where('customer_id','=',auth()->user()->id)
+            ->delete();
+
+    }
+    public function getCartProductTotal($product_id)
+    {
+        return static::selectRaw('carts.product_id,sum(carts.quantity*product_prices.price) as total_price')
+            ->join('product_prices','product_prices.product_id','=','carts.product_id')
+            ->where('carts.customer_id','=',auth()->user()->id)
+            ->where('carts.product_id','=',$product_id)
+            ->groupBy('carts.product_id')
+            ->get()->toArray();
+    }
+    public function getCartTotal()
+    {
+        return static::selectRaw('carts.product_id,sum(carts.quantity*product_prices.price) as total_price')
+            ->join('product_prices','product_prices.product_id','=','carts.product_id')
+            ->where('carts.customer_id','=',auth()->user()->id)
+            ->groupBy('carts.product_id')
+            ->get()->toArray();
     }
 
 }

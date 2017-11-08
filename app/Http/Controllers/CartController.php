@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\View;
+
 
 class CartController extends Controller
 {
     private $repository;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function __construct(CartRepository $cartrepository)
     {
         $this->repository=$cartrepository;
@@ -21,74 +20,40 @@ class CartController extends Controller
 
     public function index()
     {
-        //
-        $cartdata=$this->repository->getData();
-        return view('cart',compact('cartdata'));
-        //return View::make('cart')->with('cartdata',$this->repository->getData());
+
+        return View::make('cart')->with('cartdata',$this->repository->getData());
     }
 
 
     public function store(Request $request)
     {
-        //
-        //echo "Hello";die;
-            $result=$this->repository->addToCart($request);
+
+       $result=$this->repository->addToCart($request);
             //print_r($result);die;
-           if($result)
-           {
-              return redirect('/cart');
-           }
-           else
-           {
-               return Redirect::back()->withErrors(['msg', 'Product not added in cart']);
-           }
+       if($result)
+       {
+          return redirect('/cart');
+       }
+       else
+       {
+           return Redirect::back()->withErrors(['msg', 'Product not added in cart']);
+       }
 
 
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Cart $cart)
+
+    public function update(Request $request)
     {
         //
+        return $this->repository->updateQuantity($request);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cart $cart)
+    public function destroy(Request $request)
     {
         //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Cart $cart)
-    {
-        //
+        return $this->repository->removeProductFromCart($request);
     }
 }
