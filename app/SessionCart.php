@@ -5,31 +5,19 @@ use App\Repositories\CartRepository;
 
 class SessionCart
 {
-    protected $cart;
-    protected $cart_data=array();
 
+   
 
-
-
-    public function setCart()
-    {
-        if(count(seesion('cart'))>0)
-        {
-            $this->cart=seesion('cart');
-        }
-        else
-        {
-            $this->cart=array();
-        }
-    }
     public function getCart()
     {
-        return $this->cart;
+        return session('cart');
 
     }
     public function getCartCount()
     {
-        return count($this->cart);
+
+        return count(session('cart'));
+
 
     }
     public function addToCart(CartRepository $cartRepository)

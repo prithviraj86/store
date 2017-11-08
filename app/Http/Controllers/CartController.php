@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CartController extends Controller
 {
@@ -21,8 +22,9 @@ class CartController extends Controller
     public function index()
     {
         //
-
-        return View::make('index')->with('cartdata',$this->repository->getData());
+        $cartdata=$this->repository->getData();
+        return view('cart',compact('cartdata'));
+        //return View::make('cart')->with('cartdata',$this->repository->getData());
     }
 
 
@@ -31,13 +33,14 @@ class CartController extends Controller
         //
         //echo "Hello";die;
             $result=$this->repository->addToCart($request);
-           if($request)
+            //print_r($result);die;
+           if($result)
            {
-               redirect('/cart');
+              return redirect('/cart');
            }
            else
            {
-               Redirect::back()->withErrors(['msg', 'Product not added in cart']);
+               return Redirect::back()->withErrors(['msg', 'Product not added in cart']);
            }
 
 
