@@ -74,7 +74,7 @@ class Cart extends Model
 
         return $this->getCartProductTotal($product_id);
     }
-    public function deleteProduct($product_id)
+    public function deleteProduct(int $product_id)
     {
         return static::query()
             ->where('product_id','=',$product_id)
@@ -82,7 +82,7 @@ class Cart extends Model
             ->delete();
 
     }
-    public function getCartProductTotal($product_id)
+    public function getCartProductTotal(int $product_id)
     {
         return static::selectRaw('carts.product_id,sum(carts.quantity*product_prices.price) as total_price')
             ->join('product_prices','product_prices.product_id','=','carts.product_id')

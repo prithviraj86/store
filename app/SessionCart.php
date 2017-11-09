@@ -6,7 +6,7 @@ use App\Repositories\CartRepository;
 class SessionCart
 {
 
-    public $cart_name='cart';
+    private $cart_name='cart';
 
     public function getCart()
     {
@@ -98,7 +98,7 @@ class SessionCart
         session()->put($this->cart_name,$cart_data);
         $return_data=array('product_id'=>(int)$product_id,'total_price'=>$cart_data[$product_id]['total_price']);
 
-        return $this->getCartProductTotal($product_id,$quantity);
+        return $this->getCartProductTotal(  $product_id,$quantity);
 
     }
     public function updateCartAfterLogin()
@@ -111,7 +111,7 @@ class SessionCart
         session()->forget($this->cart_name.".".$product_id);
 
     }
-    public function getCartProductTotal($product_id,$quantity)
+    public function getCartProductTotal(int $product_id,int $quantity)
     {
         $cart_data=$this->getCart();
         $return_data[]=array('product_id'=>(int)$product_id,'total_price'=>$quantity*$cart_data[$product_id]['price']);
