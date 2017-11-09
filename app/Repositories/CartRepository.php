@@ -3,7 +3,9 @@ namespace App\Repositories;
 
 use App\Cart;
 use App\SessionCart;
+
 use Illuminate\Http\Request;
+
 use Mockery\Exception;
 
 class CartRepository
@@ -13,64 +15,27 @@ class CartRepository
     private $cart_session;
     private $user_id;
     private $product_id;
-    private $product_name;
-    private $product_price;
-    private $product_qty;
+
 
     public function __construct(Cart $cart,SessionCart $sessionCart)
     {
         $this->cart_model=$cart;
         $this->cart_session=$sessionCart;
 
-        if(isset(auth()->user()->id))
-        {
-            $this->user_id=auth()->user()->id;
-        }
-        else
-        {
-            $this->user_id=null;
-        }
+    }
+    public function setUserId($uid)
+    {
+
+        $this->user_id=$uid;
 
     }
-    public function setProductId($id)
-    {
-        $this->product_id=$id;
-    }
-    public function getProductid()
-    {
-        return $this->product_id;
-    }
-    public function setProductPrice($price)
-    {
-        $this->product_price=$price;
-    }
-    public function getProductPrice()
-    {
-        return $this->product_price;
-    }
-    public function setProductName($name)
-    {
-        $this->product_name=$name;
-    }
-    public function getProductName()
-    {
-        return $this->product_name;
-    }
-    public function setProductQuantity($quantity)
-    {
-        $this->product_qty=$quantity;
-    }
 
-    public function getProductQuantity()
-    {
-        return $this->product_qty;
-    }
 
     public function getData()
     {
         if(isset($this->user_id) and $this->user_id!='')
         {
-            return $this->cart_model->getCart() ;
+            return $this->cart_model->get($this->user_id) ;
         }
         else
         {
@@ -81,23 +46,28 @@ class CartRepository
     public function addToCart(Request $request)
     {
         //session()->forget('cart');die;
+        if($request->quantity)
+        {
+            return false;
+        }
+
         if(isset($this->user_id) and $this->user_id!='')
         {
 
 
 
 
-            $get_product_data=$this->cart_model->getCartProductById($request->pid);
+            $get_product_data=$this->cart_model->getProduct($request->pid,$this->user_id);
             //print_r($get_product_data->id);die;
             if(isset($get_product_data->id) and $get_product_data->id!='')
             {
                 //echo "Product Exiasted";die;
                 $newoty=$get_product_data->quantity+$request->quantity;
                 //echo $newoty;die;
-                $this->setProductId($request->pid);
-                $this->setProductQuantity($newoty);
+                $product_id=$request->pid;
 
-                return $this->cart_model->updateCartQty($this);
+
+                return $this->cart_model->updateQuantity($product_id,$newoty,$this->user_id);
             }
             else
             {
@@ -129,7 +99,7 @@ class CartRepository
     }
     public function updateQuantity(Request $request)
     {
-
+        ///This method is used for ajax quantity update
         if($request->quantity=='')
         {
             throw new Exception('Please select quatity');
@@ -143,37 +113,63 @@ class CartRepository
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->updateCartQty($product_id,$quantity);
+            return $this->cart_model->updateQuantity($product_id,$quantity,$this->user_id);
         }
         else
         {
-            return $this->cart_session->updateCartQuantity($product_id,$quantity);
+            return $this->cart_session->updateQuantity($product_id,$quantity);
         }
 
 
 
     }
+
 
     public function removeProductFromCart(Request $request)
     {
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->deleteProduct($request->product_id);
+            return $this->cart_model->deleteProduct($request->product_id,$this->user_id);
         }
         else
         {
             return $this->cart_session->removeProduct($request->product_id);
         }
     }
+
+
+
     public function updateCartOnLogin()
     {
-        $cart_data=$this->cart_session->getCartForLogin($this->user_id);
-        foreach ($cart_data as $data)
+        $cart_data=$this->cart_session->getData($this->user_id);
+        foreach ($cart_data as $value)
         {
+            $get_product_data=$this->cart_model->getProduct($value['product_id'],$this->user_id);
+
+            if(isset($get_product_data->id) and $get_product_data->id!='')
+            {
+
+                $newoty=$get_product_data->quantity+$value['quantity'];
+                return $this->cart_model->updateQuantity($value['product_id'],$newoty,$this->user_id);
+
+
+            }
+            else
+            {
+                $this->cart_model->product_id=$value['product_id'];
+                $this->cart_model->quantity=$value['quantity'];
+                $this->cart_model->customer_id=$this->user_id;
+                $this->cart_model->save();
+                $this->cart_session->emptyCart();
+                return true;
+            }
 
         }
+
+
     }
+
 
 
 }

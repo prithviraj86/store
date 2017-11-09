@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
@@ -15,12 +16,22 @@ class CartController extends Controller
 
     public function __construct(CartRepository $cartrepository)
     {
+
         $this->repository=$cartrepository;
+
+        $this->middleware(function ($request, $next) {
+            //echo Auth::id();die;
+            $this->repository->setUserId(Auth::id());
+
+            return $next($request);
+        });
+
     }
 
     public function index()
     {
 
+        //$this->repository->updateCartOnLogin();die;
         return View::make('cart')->with('cartdata',$this->repository->getData());
     }
 
