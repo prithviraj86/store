@@ -11,6 +11,7 @@ class CartRepository
 
     private $cart_model;
     private $cart_session;
+    private $user_id;
     private $product_id;
     private $product_name;
     private $product_price;
@@ -20,6 +21,16 @@ class CartRepository
     {
         $this->cart_model=$cart;
         $this->cart_session=$sessionCart;
+
+        if(isset(auth()->user()->id))
+        {
+            $this->user_id=auth()->user()->id;
+        }
+        else
+        {
+            $this->user_id=null;
+        }
+
     }
     public function setProductId($id)
     {
@@ -57,7 +68,7 @@ class CartRepository
 
     public function getData()
     {
-        if(isset(auth()->user()->id) and auth()->user()->id!='')
+        if(isset($this->user_id) and $this->user_id!='')
         {
             return $this->cart_model->getCart() ;
         }
@@ -70,7 +81,7 @@ class CartRepository
     public function addToCart(Request $request)
     {
         //session()->forget('cart');die;
-        if(isset(auth()->user()->id) and auth()->user()->id!='')
+        if(isset($this->user_id) and $this->user_id!='')
         {
 
 
@@ -92,7 +103,7 @@ class CartRepository
             {
                 $this->cart_model->product_id=$request->pid;
                 $this->cart_model->quantity=$request->quantity;
-                $this->cart_model->customer_id=auth()->user()->id;
+                $this->cart_model->customer_id=$this->user_id;
                 return $this->cart_model->save();
             }
 
@@ -129,10 +140,10 @@ class CartRepository
             $quantity=$request->quantity;
         }
 
-        if(isset(auth()->user()->id) and auth()->user()->id!='')
+        if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->updateCartQty($this);
+            return $this->cart_model->updateCartQty($product_id,$quantity);
         }
         else
         {
@@ -145,7 +156,7 @@ class CartRepository
 
     public function removeProductFromCart(Request $request)
     {
-        if(isset(auth()->user()->id) and auth()->user()->id!='')
+        if(isset($this->user_id) and $this->user_id!='')
         {
 
             return $this->cart_model->deleteProduct($request->product_id);
@@ -153,6 +164,14 @@ class CartRepository
         else
         {
             return $this->cart_session->removeProduct($request->product_id);
+        }
+    }
+    public function updateCartOnLogin()
+    {
+        $cart_data=$this->cart_session->getCartForLogin($this->user_id);
+        foreach ($cart_data as $data)
+        {
+
         }
     }
 

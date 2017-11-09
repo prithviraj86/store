@@ -28,7 +28,7 @@ class Cart extends Model
 
     public function getCart()
     {
-        //echo $this->sesssion_id;die;
+
 
             return static::selectRaw('carts.product_id,products.name,product_prices.price,carts.quantity,sum(carts.quantity*product_prices.price) as total_price')
                 ->join('products','carts.product_id','=','products.id')
@@ -42,15 +42,15 @@ class Cart extends Model
     public static function updateCartOnLogin()
     {
 
-        //echo $old_session_id;
-        if(isset(auth()->user()->id))
-        {
-        $old_session_id=session('old_id');
-        return static::query()
-                        ->where('session_id','=',$old_session_id)
-                        ->update(['customer_id' => auth()->user()->id]);
 
-        }
+//        if(isset(auth()->user()->id))
+//        {
+//        $old_session_id=session('old_id');
+//        return static::query()
+//                        ->where('session_id','=',$old_session_id)
+//                        ->update(['customer_id' => auth()->user()->id]);
+//
+//        }
 
     }
     public function getCartProductById($id)
@@ -65,8 +65,7 @@ class Cart extends Model
     }
     public function updateCartQty(int $product_id,int $quantity)
     {
-       // echo $cart->quanitty;die;
-        //echo $cart_repository->getProductQuantity();die;
+
          static::query()
             ->where('product_id','=',$product_id)
             ->where('customer_id','=',auth()->user()->id)

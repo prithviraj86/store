@@ -129,6 +129,17 @@ class SessionCart
         return $result_data;
 
     }
+    public function getCartForLogin($user_id)
+    {
+        $cart_data=$this->getCart();
+        foreach($cart_data as $arr)
+        {
+            $result_data['product_id']=$arr['product_id'];
+            $result_data['quantity']=$arr['quantity'];
+            $result_data['customer_id']=$user_id;
+        }
+        return $result_data;
+    }
 
 
 
