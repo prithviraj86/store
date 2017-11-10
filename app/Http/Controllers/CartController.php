@@ -32,12 +32,14 @@ class CartController extends Controller
     {
 
         //$this->repository->updateCartOnLogin();die;
+        //print_r($this->repository->getData());
         return View::make('cart')->with('cartdata',$this->repository->getData());
     }
 
 
     public function store(Request $request)
     {
+
 
        $result=$this->repository->addToCart($request);
             //print_r($result);die;

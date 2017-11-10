@@ -33,33 +33,36 @@ class CartRepository
 
     public function getData()
     {
-        if(isset($this->user_id) and $this->user_id!='')
+        if(setOrNotBlank($this->user_id))
         {
             return $this->cart_model->get($this->user_id) ;
         }
         else
         {
-            return $this->cart_session->getCart();
+            return $this->cart_session->get();
         }
 
     }
     public function addToCart(Request $request)
     {
         //session()->forget('cart');die;
-        if($request->quantity)
+
+        if(setOrBlank($request->quantity))
         {
+
             return false;
         }
-
-        if(isset($this->user_id) and $this->user_id!='')
+        //dd($request);die;
+        if(setOrNotBlank($this->user_id))
         {
+
 
 
 
 
             $get_product_data=$this->cart_model->getProduct($request->pid,$this->user_id);
             //print_r($get_product_data->id);die;
-            if(isset($get_product_data->id) and $get_product_data->id!='')
+            if(setOrNotBlank($get_product_data))
             {
                 //echo "Product Exiasted";die;
                 $newoty=$get_product_data->quantity+$request->quantity;
@@ -81,6 +84,7 @@ class CartRepository
         }
         else
         {
+
             $save_data=array(
                 'product_id'=>$request->pid,
                 'quantity'=>$request->quantity,
@@ -100,7 +104,7 @@ class CartRepository
     public function updateQuantity(Request $request)
     {
         ///This method is used for ajax quantity update
-        if($request->quantity=='')
+        if(setOrblank($request->quantity))
         {
             throw new Exception('Please select quatity');
         }
@@ -110,7 +114,7 @@ class CartRepository
             $quantity=$request->quantity;
         }
 
-        if(isset($this->user_id) and $this->user_id!='')
+        if(setOrNotBlank($this->user_id))
         {
 
             return $this->cart_model->updateQuantity($product_id,$quantity,$this->user_id);
@@ -147,7 +151,7 @@ class CartRepository
         {
             $get_product_data=$this->cart_model->getProduct($value['product_id'],$this->user_id);
 
-            if(isset($get_product_data->id) and $get_product_data->id!='')
+            if(setOrNotBlank($get_product_data->id))
             {
 
                 $newoty=$get_product_data->quantity+$value['quantity'];

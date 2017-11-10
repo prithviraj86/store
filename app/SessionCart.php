@@ -2,17 +2,18 @@
 namespace App;
 
 
+
 class SessionCart
 {
 
     private $cart_name='cart';
 
-    public function getCart()
+    public function get()
     {
         return session($this->cart_name);
 
     }
-    public function getCartCount()
+    public function getCount()
     {
 
         return count(session($this->cart_name));
@@ -21,13 +22,14 @@ class SessionCart
     }
     public function addToCart(array $save_data)
     {
+        //print_r($save_data);die;
         $cart_data=array();
-        $product_id    = $save_data['product_id'];
-        $product_name  = $save_data['name'];
-        $product_price = $save_data['price'];
-        $product_qty   = $save_data['quantity'];
+        $product_id    = data_get($save_data,'product_id');//$save_data['product_id'];
+        $product_name  = data_get($save_data,'name');//$save_data['name'];
+        $product_price = data_get($save_data,'price');//$save_data['price'];
+        $product_qty   = data_get($save_data,'quantity');//$save_data['quantity'];
 
-        $cart_data['quantity'] = $product_qty;
+        //$cart_data['quantity'] = $product_qty;
 
 
         // get quantity if it's already there and add it on
@@ -40,12 +42,16 @@ class SessionCart
         {
         $old_qty=0;
         }
-
-        $cart_data['name']  = $product_name;
-        $cart_data['product_id']  = $product_id;
-        $cart_data['quantity'] += $old_qty;
-        $cart_data['price'] = $product_price;
-        $cart_data['total_price'] = $product_price*$cart_data['quantity'];
+        data_set($cart_data,'name',$product_name);
+        data_set($cart_data,'product_id',$product_id);
+        data_set($cart_data,'quantity',$product_qty+$old_qty);
+        data_set($cart_data,'price',$product_price);
+        data_set($cart_data,'total_price',$product_price*data_get($cart_data,'quantity'));
+//        $cart_data['name']  = $product_name;
+//        $cart_data['product_id']  = $product_id;
+//        $cart_data['quantity'] += $old_qty;
+//        $cart_data['price'] = $product_price;
+//        $cart_data['total_price'] = $product_price*$cart_data['quantity'];
 
         if(session()->has($this->cart_name))
         {
@@ -73,18 +79,24 @@ class SessionCart
         $product_id=$product_id;
         $quantity=$quantity;
 
-        $cart_data=$this->getCart();
+        $cart_data=$this->get();
+        data_set($cart_data,$product_id.'.quantity',$quantity);
+        data_set($cart_data,$product_id.'.total_price',$quantity*data_get($cart_data,$product_id.'.price'));
+        //$cart_data[$product_id]['quantity']=$quantity;
 
-        $cart_data[$product_id]['quantity']=$quantity;
-        $cart_data[$product_id]['total_price']=$quantity*$cart_data[$product_id]['price'];
+        //$cart_data[$product_id]['total_price']=$quantity*$cart_data[$product_id]['price'];
         session()->put($this->cart_name,$cart_data);
-        $return_data=array('product_id'=>(int)$product_id,'total_price'=>$cart_data[$product_id]['total_price']);
+       // $return_data=array('product_id'=>(int)$product_id,'total_price'=>$cart_data[$product_id]['total_price']);
 
-        return $this->getProductTotal(  $product_id,$quantity);
+        return $this->getProductTotal($product_id);
 
     }
 
 
+    /**
+     * @param $product_id
+     * @return bool
+     */
     public function removeProduct($product_id)
     {
 
@@ -92,37 +104,35 @@ class SessionCart
         return true;
 
     }
-    public function getProductTotal(int $product_id,int $quantity)
+    public function getProductTotal(int $product_id)
     {
-        $cart_data=$this->getCart();
-        $return_data[]=array('product_id'=>(int)$product_id,'total_price'=>$quantity*$cart_data[$product_id]['price']);
-        return $return_data;
+        //echo $product_id;die;
+        $cart_data=$this->get();
+        //print_r($cart_data);die;
+        return responseFormat($product_id,$cart_data);
 
     }
     public function getCartTotal()
     {
-        $cart_data=$this->getCart();
-        foreach($cart_data as $arr)
-        {
-            $result_data['product_id']=$arr['product_id'];
-            $result_data['total_name']=$arr['total_name'];
-        }
-        return $result_data;
+        $cart_data=$this->get();
+        return responseFormat('',$cart_data);
+
 
     }
     public function getData($user_id)
     {
-        $cart_data=$this->getCart();
+        $cart_data=$this->get();
 
         //print_r($cart_data);die;
         $return_data=array();
         foreach($cart_data as $arr)
         {
-            $result_data['product_id']=$arr['product_id'];
-            $result_data['quantity']=$arr['quantity'];
-            $result_data['customer_id']=$user_id;
-            $result_data['created_at'] = date('Y-m-d H:i:s');
-            $result_data['updated_at'] = date('Y-m-d H:i:s');
+            data_set($result_data,'product_id',data_get($arr,'product_id'));
+            data_set($result_data,'quantity',data_get($arr,'quantity'));
+            data_set($result_data,'customer_id',$user_id);
+            data_set($result_data,'created_at',date('Y-m-d H:i:s'));
+            data_set($result_data,'product_id',date('Y-m-d H:i:s'));
+
             $return_data[]=$result_data;
         }
         return $return_data;
