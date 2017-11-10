@@ -4,20 +4,26 @@ namespace App\Helpers;
 class Helper
 {
 
-    public static function setOrBlank($value)
+    public static function gets($key)
     {
-        if(isset($value) and $value=='')
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+
+        return session()->get($key);
     }
-    public static function setOrNotBlank($value)
+
+    public static function remove($key)
     {
-        if(isset($value) and $value!='')
+        session()->forget($key);
+        return true;
+    }
+
+    public static function put($key,$data)
+    {
+        session()->put($key,$data);
+        return true;
+    }
+    public static function has($key)
+    {
+        if(session()->has($key))
         {
             return true;
         }
@@ -28,16 +34,16 @@ class Helper
     }
     public static function responseFormat($key,array $data)
     {
-       // echo $key;die;
+        // echo $key;die;
         $return_data=array();
         if($key=='')
         {
-        foreach($data as $arr)
-        {
-            data_set($return_data,'product_id',data_get($arr,'product_id'));
-            data_set($return_data,'total_price',data_get($arr,'total_price'));
+            foreach($data as $arr)
+            {
+                data_set($return_data,'product_id',data_get($arr,'product_id'));
+                data_set($return_data,'total_price',data_get($arr,'total_price'));
 
-        }
+            }
         }
         else
         {
@@ -48,6 +54,8 @@ class Helper
         }
         return $return_data;
     }
+
+
 
 
 }

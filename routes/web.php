@@ -20,6 +20,9 @@ Route::get('/cart', 'CartController@index');
 Route::post('/cart/store', 'CartController@store');
 Route::post('/cart/update', 'CartController@update');
 Route::post('/cart/delete', 'CartController@destroy');
+Route::get('/cart/setcart', 'CartController@setCart');
+Route::get('/cart/updatelogin', 'CartController@updateOnlogin');
+Route::get('/cart/emptys', 'CartController@emptySession');
 
 Auth::routes();
 

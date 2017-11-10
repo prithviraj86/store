@@ -30,9 +30,8 @@ class CartController extends Controller
 
     public function index()
     {
-
-        //$this->repository->updateCartOnLogin();die;
-        //print_r($this->repository->getData());
+        //print_r(session()->get('cart'));die;
+       /// $this->repository->updateCartOnLogin();
         return View::make('cart')->with('cartdata',$this->repository->getData());
     }
 
@@ -66,11 +65,31 @@ class CartController extends Controller
 
     public function destroy(Request $request)
     {
+
         //
-        return $this->repository->removeProduct($request);
+        if($this->repository->removeProduct($request))
+        {
+            return redirect('/');
+        }
+
+    }
+    public function emptySession()
+    {
+        if($this->repository->emptySession())
+        {
+            return redirect('/');
+        }
+    }
+
+    public function setCart()
+    {
+        return view('setcart');
     }
     public function updateOnlogin()
     {
-        $this->repository->updateCartOnLogin();
+        if($this->repository->updateCartOnLogin())
+        {
+            return redirect('/');
+        }
     }
 }

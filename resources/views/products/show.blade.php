@@ -33,7 +33,7 @@
 
                         <form action="/cart/store" method="post">
                             {{ csrf_field() }}
-                            <input type="hidden" value="{{$productdata->id}}" name="pid"/>
+                            <input type="hidden" value="{{$productdata->id}}" name="product_id"/>
                             <input type="hidden" value="{{$productdata->name}}" name="name"/>
                             <input type="hidden" value="{{$productdata->productprice->price}}" name="price"/>
                             <input type="hidden" value="1" name="quantity"/>

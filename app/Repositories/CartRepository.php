@@ -33,7 +33,7 @@ class CartRepository
 
     public function getData()
     {
-        if(setOrNotBlank($this->user_id))
+        if(isset($this->user_id) and $this->user_id!='')
         {
             return $this->cart_model->get($this->user_id) ;
         }
@@ -47,37 +47,32 @@ class CartRepository
     {
         //session()->forget('cart');die;
 
-        if(setOrBlank($request->quantity))
+        if(isset($request->quantity) and $request->quantity=='')
         {
 
             return false;
         }
         //dd($request);die;
-        if(setOrNotBlank($this->user_id))
+        if(isset($this->user_id) and $this->user_id!='')
         {
 
 
-
-
-
-            $get_product_data=$this->cart_model->getProduct($request->pid,$this->user_id);
+           $get_product_data=$this->cart_model->getProduct($request->product_id,$this->user_id);
             //print_r($get_product_data->id);die;
-            if(setOrNotBlank($get_product_data))
+            if(isset($get_product_data->id) and $get_product_data->id!='')
             {
                 //echo "Product Exiasted";die;
                 $newoty=$get_product_data->quantity+$request->quantity;
                 //echo $newoty;die;
-                $product_id=$request->pid;
+                $product_id=$request->product_id;
 
 
                 return $this->cart_model->updateQuantity($product_id,$newoty,$this->user_id);
             }
             else
             {
-                $this->cart_model->product_id=$request->pid;
-                $this->cart_model->quantity=$request->quantity;
-                $this->cart_model->customer_id=$this->user_id;
-                return $this->cart_model->save();
+
+                return $this->save($request);
             }
 
 
@@ -86,7 +81,7 @@ class CartRepository
         {
 
             $save_data=array(
-                'product_id'=>$request->pid,
+                'product_id'=>$request->product_id,
                 'quantity'=>$request->quantity,
                 'price'=>$request->price,
                 'name'=>$request->name
@@ -102,7 +97,7 @@ class CartRepository
     public function updateQuantity(Request $request)
     {
         ///This method is used for ajax quantity update
-        if(setOrblank($request->quantity))
+        if(isset($request->quantity) and $request->quantity=='')
         {
             throw new Exception('Please select quatity');
         }
@@ -112,7 +107,7 @@ class CartRepository
             $quantity=$request->quantity;
         }
 
-        if(setOrNotBlank($this->user_id))
+        if(isset($this->user_id) and $this->user_id!='')
         {
 
             return $this->cart_model->updateQuantity($product_id,$quantity,$this->user_id);
@@ -128,7 +123,7 @@ class CartRepository
 
     public function removeProduct(Request $request)
     {
-        if(setOrNotBlank($this->user_id))
+        if(isset($this->user_id) and $this->user_id!='')
         {
 
             return $this->cart_model->deleteProduct($request->product_id,$this->user_id);
@@ -138,35 +133,69 @@ class CartRepository
             return $this->cart_session->removeProduct($request->product_id);
         }
     }
-
-
-    public function updateCartOnLogin($user_id)
+    public function emptyCart()
     {
-        $cart_data=$this->cart_session->getData($user_id);
+        if(isset($this->user_id) and $this->user_id!='')
+        {
+
+            return $this->cart_model->emptyCart($this->user_id);
+        }
+        else
+        {
+            return $this->cart_session->emptyCart();
+        }
+    }
+    public function emptySession()
+    {
+        return $this->cart_session->emptyCart();
+    }
+
+
+
+    public function updateCartOnLogin()
+    {
+        if(isset($this->user_id) and $this->user_id!='')
+        {
+        $cart_data=$this->cart_session->getData($this->user_id);
         foreach ($cart_data as $value)
         {
-            $get_product_data=$this->cart_model->getProduct($value['product_id'],$user_id);
+            $value=(object)$value;
 
-            if(setOrNotBlank($get_product_data->id))
+            $get_product_data=$this->cart_model->getProduct($value->product_id,$this->user_id);
+            //echo
+            //print_r($get_product_data);die;
+            if(isset($get_product_data->id))
             {
 
-                $newoty=$get_product_data->quantity+$value['quantity'];
-                return $this->cart_model->updateQuantity($value['product_id'],$newoty,$user_id);
+                $newoty=$get_product_data->quantity+$value->quantity;
+                //print_r($value);die;
+                $this->cart_model->updateQuantity($value->product_id,$newoty,$this->user_id);
 
 
             }
             else
             {
-                $this->cart_model->product_id=$value['product_id'];
-                $this->cart_model->quantity=$value['quantity'];
-                $this->cart_model->customer_id=$this->user_id;
-                $this->cart_model->save();
+                //print_r($value);die;
+                $this->save($value);
                 $this->cart_session->emptyCart();
-                return true;
+
             }
 
         }
+        return true;
+        }
+        else
+        {
+            throw new Exception('Access Denied,Invalid Access');
+        }
 
+    }
+    public function save($item)
+    {
+        $this->cart_model->product_id=$item->product_id;
+        $this->cart_model->quantity=$item->quantity;
+        $this->cart_model->customer_id=$this->user_id;
+        return $this->cart_model->save();
 
     }
 
