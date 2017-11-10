@@ -92,9 +92,7 @@ class CartRepository
                 'name'=>$request->name
             );
 
-//            $this->setProductQuantity($request->quantity);
-//            $this->setProductPrice($request->price);
-//            $this->setProductName($request->name);
+//
 
            return $this->cart_session->addToCart($save_data);
         }
@@ -128,10 +126,9 @@ class CartRepository
 
     }
 
-
-    public function removeProductFromCart(Request $request)
+    public function removeProduct(Request $request)
     {
-        if(isset($this->user_id) and $this->user_id!='')
+        if(setOrNotBlank($this->user_id))
         {
 
             return $this->cart_model->deleteProduct($request->product_id,$this->user_id);
@@ -143,19 +140,18 @@ class CartRepository
     }
 
 
-
-    public function updateCartOnLogin()
+    public function updateCartOnLogin($user_id)
     {
-        $cart_data=$this->cart_session->getData($this->user_id);
+        $cart_data=$this->cart_session->getData($user_id);
         foreach ($cart_data as $value)
         {
-            $get_product_data=$this->cart_model->getProduct($value['product_id'],$this->user_id);
+            $get_product_data=$this->cart_model->getProduct($value['product_id'],$user_id);
 
             if(setOrNotBlank($get_product_data->id))
             {
 
                 $newoty=$get_product_data->quantity+$value['quantity'];
-                return $this->cart_model->updateQuantity($value['product_id'],$newoty,$this->user_id);
+                return $this->cart_model->updateQuantity($value['product_id'],$newoty,$user_id);
 
 
             }

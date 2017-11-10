@@ -67,6 +67,10 @@ class CartController extends Controller
     public function destroy(Request $request)
     {
         //
-        return $this->repository->removeProductFromCart($request);
+        return $this->repository->removeProduct($request);
+    }
+    public function updateOnlogin()
+    {
+        $this->repository->updateCartOnLogin();
     }
 }
