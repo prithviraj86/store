@@ -10,7 +10,7 @@
             @endif
             <div class="row">
                 <div class="col-lg-12">
-                        <h3>You have some data in cart, Are you want to add in user account</h3>
+                        <h3>You have  products in cart, Are you want to add in your account</h3>
                         <a href="/cart/updatelogin"><button type="button" class="btn btn-success">Yes</button></a>
                         <a href="/cart/emptys"><button type="button" class="btn btn-danger">No</button></a>
                 </div>

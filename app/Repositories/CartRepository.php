@@ -27,6 +27,7 @@ class CartRepository
     {
 
         $this->user_id=$uid;
+        $this->cart_model->setUserId($uid);
 
     }
 
@@ -35,7 +36,7 @@ class CartRepository
     {
         if(isset($this->user_id) and $this->user_id!='')
         {
-            return $this->cart_model->get($this->user_id) ;
+            return $this->cart_model->get() ;
         }
         else
         {
@@ -45,19 +46,12 @@ class CartRepository
     }
     public function addToCart(Request $request)
     {
-        //session()->forget('cart');die;
 
-        if(isset($request->quantity) and $request->quantity=='')
-        {
-
-            return false;
-        }
-        //dd($request);die;
         if(isset($this->user_id) and $this->user_id!='')
         {
 
 
-           $get_product_data=$this->cart_model->getProduct($request->product_id,$this->user_id);
+           $get_product_data=$this->cart_model->getProduct($request->product_id);
             //print_r($get_product_data->id);die;
             if(isset($get_product_data->id) and $get_product_data->id!='')
             {
@@ -67,7 +61,7 @@ class CartRepository
                 $product_id=$request->product_id;
 
 
-                return $this->cart_model->updateQuantity($product_id,$newoty,$this->user_id);
+                return $this->cart_model->update($product_id,null);
             }
             else
             {
@@ -110,7 +104,7 @@ class CartRepository
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->updateQuantity($product_id,$quantity,$this->user_id);
+            return $this->cart_model->update($product_id,$quantity);
         }
         else
         {
@@ -126,7 +120,7 @@ class CartRepository
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->deleteProduct($request->product_id,$this->user_id);
+            return $this->cart_model->delete($request->product_id);
         }
         else
         {
@@ -138,7 +132,7 @@ class CartRepository
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->emptyCart($this->user_id);
+            return $this->cart_model->emptyCart();
         }
         else
         {
@@ -161,7 +155,7 @@ class CartRepository
         {
             $value=(object)$value;
 
-            $get_product_data=$this->cart_model->getProduct($value->product_id,$this->user_id);
+            $get_product_data=$this->cart_model->getProduct($value->product_id);
             //echo
             //print_r($get_product_data);die;
             if(isset($get_product_data->id))
@@ -169,7 +163,7 @@ class CartRepository
 
                 $newoty=$get_product_data->quantity+$value->quantity;
                 //print_r($value);die;
-                $this->cart_model->updateQuantity($value->product_id,$newoty,$this->user_id);
+                $this->cart_model->update($value->product_id,$newoty);
 
 
             }
@@ -193,7 +187,10 @@ class CartRepository
     public function save($item)
     {
         $this->cart_model->product_id=$item->product_id;
-        $this->cart_model->quantity=$item->quantity;
+        if(isset($item->quantity) and $item->quantity!='')
+            $this->cart_model->quantity=$item->quantity;
+        else
+            $this->cart_model->incrementing('quntity');
         $this->cart_model->customer_id=$this->user_id;
         return $this->cart_model->save();
 
