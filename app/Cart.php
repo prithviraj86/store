@@ -54,9 +54,23 @@ class Cart extends Model
     }
     public function updatec(int $product_id,int $quantity)
     {
+        //echo $quantity;die;
         // Quantity is here because if user select more than 1 product
-         static::query()->increment('quantity',$quantity,['product_id'=>$product_id,'customer_id'=>$this->user_id]);
+         //static::query()->increment('quantity',$quantity,['product_id'=>$product_id,'customer_id'=>$this->user_id]);
 
+        return static::query()->updateOrCreate(
+                                        ['product_id'=>$product_id,'customer_id'=>$this->user_id],
+                                        ['product_id'=>$product_id,'customer_id'=>$this->user_id]
+                                        )
+                              ->increment('quantity',$quantity);
+
+
+
+    }
+
+    public function updateQuantity(int $product_id,int $quantity)
+    {
+        static::query()->where(['product_id'=>$product_id,'customer_id'=>$this->user_id])->first()->update(['quantity'=>$quantity]);
         return $this->getProductTotal($product_id);
     }
 
@@ -76,13 +90,6 @@ class Cart extends Model
             ->groupBy('carts.product_id')
             ->get()->toArray();
     }
-    public function getTotal()
-    {
-        return static::selectRaw('carts.product_id,sum(carts.quantity*product_prices.price) as total_price')
-            ->join('product_prices','product_prices.product_id','=','carts.product_id')
-            ->where('carts.customer_id','=',$this->user_id)
-            ->groupBy('carts.product_id')
-            ->get()->toArray();
-    }
+
 
 }

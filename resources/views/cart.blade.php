@@ -4,8 +4,8 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="container">
-
-        @if(!isset($cartdata) and count($cartdata)==0)
+        <?php //echo count($cartdata); ?>
+        @if((isset($cartdata) and count($cartdata)==0) or (!isset($cartdata)))
             <h3>Cart Empty</h3>
             <a href="/"  >
                 <button style="cursor: pointer;" class="btn btn-primary">Continue Shopping</button>
@@ -39,7 +39,12 @@
             </div>
             <div class="col-md-1">
                 <p>{{$value['total_price']}}</p>
-                <button type="button" class="btn btn-danger">Remove</button>
+                <form action="/cart/delete" method="post">
+                    {{csrf_field()}}
+                    <input type="hidden" value="{{$value['product_id']}}" name="product_id">
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+
             </div>
 
         </div>
