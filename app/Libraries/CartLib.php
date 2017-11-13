@@ -31,8 +31,10 @@ class CartLib
 
     public function getData()
     {
+
         if(isset($this->user_id) and $this->user_id!='')
         {
+
             return $this->cart_model->get() ;
         }
         else
@@ -54,7 +56,7 @@ class CartLib
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->updatec($request->product_id,$request->quantity);
+            return $this->cart_model->addOrUpdate($request->product_id);
 
         }
         else
@@ -62,7 +64,6 @@ class CartLib
 
             $save_data=array(
                 'product_id'=>$request->product_id,
-                'quantity'=>$request->quantity,
                 'price'=>$request->price,
                 'name'=>$request->name
             );
@@ -70,7 +71,7 @@ class CartLib
         }
 
     }
-    public function update(Request $request)
+    public function decreseQuantity(Request $request)
     {
 
         $request->validate([
@@ -78,15 +79,14 @@ class CartLib
             'product_id'=>'required|integer',
         ]);
         $product_id=$request->product_id;
-        $quantity=$request->quantity;
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->updateQuantity($product_id,$quantity);
+            return $this->cart_model->decreseQuntity($product_id);
         }
         else
         {
-            return $this->cart_session->updateQuantity($product_id,$quantity);
+            return $this->cart_session->decreseQuantity($product_id);
         }
     }
     public function removeProduct(Request $request)
@@ -119,6 +119,7 @@ class CartLib
     }
     public function updateOnlogin()
     {
+
         if(isset($this->user_id) and $this->user_id!='')
         {
             $cart_data=$this->cart_session->getData($this->user_id);
@@ -127,17 +128,17 @@ class CartLib
                 $value=(object)$value;
 
 
-                $this->cart_model->updatec($value->product_id,$value->quantity);
+                $this->cart_model->addOrUpdate($value->product_id);
 
                 $this->cart_session->emptyCart();
 
 
             }
-            return redirect('/');
+            return true;
         }
         else
         {
-            throw new Exception('Access Denied,Invalid Access');
+            return false;
         }
 
     }

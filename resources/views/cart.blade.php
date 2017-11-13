@@ -4,7 +4,8 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="container">
-        <?php //echo count($cartdata); ?>
+        <?php //dd($cartdata);die;//echo count($cartdata); ?>
+
         @if((isset($cartdata) and count($cartdata)==0) or (!isset($cartdata)))
             <h3>Cart Empty</h3>
             <a href="/"  >

@@ -53,7 +53,7 @@ class CartController extends Controller
         }
         else
         {
-           return Redirect::back()->withErrors(['msg', 'Product not added in cart']);
+           return Redirect::back()->withErrors(['Product not added in cart']);
         }
 
 
@@ -64,7 +64,7 @@ class CartController extends Controller
     public function update(Request $request)
     {
         //
-        return $this->cart_lib->update($request);
+        return $this->cart_lib->decreseQuantity($request);
     }
 
 
@@ -79,7 +79,7 @@ class CartController extends Controller
         }
         else
         {
-            return Redirect::back()->withErrors(['msg', 'Product not removed from cart']);
+            return Redirect::back()->withErrors(['Product not removed from cart']);
         }
 
     }
@@ -100,7 +100,7 @@ class CartController extends Controller
         }
         else
         {
-            return Redirect::back()->withErrors(['msg', 'Cart not empty']);
+            return Redirect::back()->withErrors(['Cart not empty']);
         }
     }
 
@@ -113,7 +113,15 @@ class CartController extends Controller
     //This function  is used ,when user login and say Yes to add current(without login) cart product in his cart
     public function updateOnlogin()
     {
-        $this->cart_lib->updateOnlogin();
+        $result=$this->cart_lib->updateOnlogin();
+        if($result)
+        {
+            return redirect('/');
+        }
+        else
+        {
+            return Redirect::back()->withErrors(['Cart not updated']);
+        }
 
     }
 

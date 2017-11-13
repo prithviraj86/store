@@ -17,7 +17,7 @@ class Cart extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsToMany(Product::class);
 
     }
 
@@ -26,8 +26,19 @@ class Cart extends Model
         $this->user_id=$user_id;
     }
 
-    public function add()
+    public function addOrUpdate(int $product_id)
     {
+
+        // Quantity is here because if user select more than 1 product
+
+
+        return static::query()->updateOrCreate(
+            ['product_id'=>$product_id,'customer_id'=>$this->user_id],
+            ['product_id'=>$product_id,'customer_id'=>$this->user_id]
+             )
+            ->increment('quantity');
+
+
 
     }
 
@@ -45,32 +56,12 @@ class Cart extends Model
 
     }
 
-    public function getProduct(int $id)
+
+
+    //Update the quantity which user selected
+    public function decreseQuntity(int $product_id)
     {
-
-        return static::selectRaw('id,quantity')->where('product_id','=',$id)->where('customer_id','=',$this->user_id)->get()->first();
-
-
-    }
-    public function updatec(int $product_id,int $quantity)
-    {
-        //echo $quantity;die;
-        // Quantity is here because if user select more than 1 product
-         //static::query()->increment('quantity',$quantity,['product_id'=>$product_id,'customer_id'=>$this->user_id]);
-
-        return static::query()->updateOrCreate(
-                                        ['product_id'=>$product_id,'customer_id'=>$this->user_id],
-                                        ['product_id'=>$product_id,'customer_id'=>$this->user_id]
-                                        )
-                              ->increment('quantity',$quantity);
-
-
-
-    }
-
-    public function updateQuantity(int $product_id,int $quantity)
-    {
-        static::query()->where(['product_id'=>$product_id,'customer_id'=>$this->user_id])->first()->update(['quantity'=>$quantity]);
+        static::query()->decrement('quantity',1,['product_id'=>$product_id,'customer_id'=>$this->user_id]);
         return $this->getProductTotal($product_id);
     }
 

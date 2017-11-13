@@ -27,12 +27,13 @@ class Product extends Model
 
     public function cart()
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasMany(Cart::class);
     }
 
     public function addProduct(Product $product)
     {
 
+        //Wrong code will change soon
         $product->save();
         $productdetail=new ProductDetail();
         //$productdetail->manufacturer=

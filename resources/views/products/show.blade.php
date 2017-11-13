@@ -22,9 +22,11 @@
                     <label>Special Price:-</label>{{$productdata->productprice->special_price}}
 
                     </p>
-
+                        <?php
+                       // dd($productdata);die;
+                    ?>
                         @if(isset($productdata->cart->cart_id) and $productdata->cart->cart_id!='')
-                        <a href="/cart"  >
+                        <a href="/cart">
                             <input type="button" value="Go to cart" style="cursor: pointer;" class="btn btn-primary" name="gocart"/>
                         </a>
 

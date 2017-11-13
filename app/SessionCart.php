@@ -26,7 +26,7 @@ class SessionCart
         $product_id    = data_get($save_data,'product_id');
         $product_name  = data_get($save_data,'name');
         $product_price = data_get($save_data,'price');
-        $product_qty   = data_get($save_data,'quantity');
+        //$product_qty   = data_get($save_data,'quantity');
 
         // get quantity if it's already there and add it on
         ///get,has,remove,put are helper method for session
@@ -43,7 +43,7 @@ class SessionCart
         }
         data_set($cart_data,'name',$product_name);
         data_set($cart_data,'product_id',$product_id);
-        data_set($cart_data,'quantity',$product_qty+$old_qty);
+        data_set($cart_data,'quantity',$old_qty+1);
         data_set($cart_data,'price',$product_price);
         data_set($cart_data,'total_price',$product_price*data_get($cart_data,'quantity'));
 
@@ -69,14 +69,23 @@ class SessionCart
 
     }
 
-    public function updateQuantity(int $product_id,int $quantity)
+    public function decreseQuantity(int $product_id)
     {
-        $product_id=$product_id;
-        $quantity=$quantity;
+
+        if(has($this->cart_name.'.'.$product_id))
+        {
+
+            $old_qty = gets($this->cart_name.'.'.$product_id.'.quantity');
+            $old_qty-=1;
+        }
+        else
+        {
+            $old_qty=0;
+        }
 
         $cart_data=$this->get();
-        data_set($cart_data,$product_id.'.quantity',$quantity);
-        data_set($cart_data,$product_id.'.total_price',$quantity*data_get($cart_data,$product_id.'.price'));
+        data_set($cart_data,$product_id.'.quantity',$old_qty);
+        data_set($cart_data,$product_id.'.total_price',$old_qty*data_get($cart_data,$product_id.'.price'));
 
         put($this->cart_name,$cart_data);
 
