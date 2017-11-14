@@ -16,7 +16,7 @@
 
 
 
-
+            <h3>Cart Items</h3>
         <div class="row" id="product_{{$value['product_id']}}">
             <div class="col-md-2">
                 <img src="images/" style="width: 180px; height: 200px;">

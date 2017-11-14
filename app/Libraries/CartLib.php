@@ -2,14 +2,14 @@
 namespace App\Libraries;
 
 use App\Cart;
-use App\SessionCart;
+use App\Libraries\SessionCart;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 
 
 class CartLib
 {
-    private $cart_model;
+    private $model;
     private $cart_session;
     private $user_id;
     private $product_id;
@@ -17,7 +17,7 @@ class CartLib
 
     public function __construct(Cart $cart,SessionCart $sessionCart)
     {
-        $this->cart_model=$cart;
+        $this->model=$cart;
         $this->cart_session=$sessionCart;
 
     }
@@ -25,7 +25,7 @@ class CartLib
     {
 
         $this->user_id=$uid;
-        $this->cart_model->setUserId($uid);
+        $this->model->setUserId($uid);
 
     }
 
@@ -35,7 +35,7 @@ class CartLib
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->get() ;
+            return $this->model->get() ;
         }
         else
         {
@@ -49,14 +49,13 @@ class CartLib
         $request->validate([
             'name'=>'required',
             'price'=>'required|integer',
-            'quantity'=>'required|integer',
             'product_id'=>'required|integer',
         ]);
         //$this->validate();
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->addOrUpdate($request->product_id);
+            return $this->model->addOrUpdate($request->product_id);
 
         }
         else
@@ -82,7 +81,7 @@ class CartLib
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->decreseQuntity($product_id);
+            return $this->model->decreseQuntity($product_id);
         }
         else
         {
@@ -94,7 +93,7 @@ class CartLib
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            $result= $this->cart_model->deletec($request->product_id);
+            $result= $this->model->deletec($request->product_id);
         }
         else
         {
@@ -106,7 +105,7 @@ class CartLib
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->cart_model->emptyCart();
+            return $this->model->emptyCart();
         }
         else
         {
@@ -128,7 +127,7 @@ class CartLib
                 $value=(object)$value;
 
 
-                $this->cart_model->addOrUpdate($value->product_id);
+                $this->model->addOrUpdate($value->product_id);
 
                 $this->cart_session->emptyCart();
 

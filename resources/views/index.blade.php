@@ -13,7 +13,8 @@
     -->
     <div class="album text-muted">
         <div class="container">
-
+            <h2 class="title ">Product List</h2>
+            <hr>
             <div class="row">
                 @foreach($products as $value)
 
