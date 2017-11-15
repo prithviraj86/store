@@ -11,9 +11,13 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * This controller Have wrong Code it will be fixed when CartController Completed
+     *This controller Have wrong Code it will be fixed when CartController Completed
+     * This controller Have wrong Code it will be fixed when CartController Completed
+     * This controller Have wrong Code it will be fixed when CartController Completed
+     * This controller Have wrong Code it will be fixed when CartController Completed
+     * This controller Have wrong Code it will be fixed when CartController Completed
+     * This controller Have wrong Code it will be fixed when CartController Completed
      */
     public function index()
     {
