@@ -23,7 +23,7 @@ class SessionStorage implements StorageInterface
         $product_id    = data_get($save_data,'product_id');
         $product_name  = data_get($save_data,'name');
         $product_price = data_get($save_data,'price');
-        //$product_qty   = data_get($save_data,'quantity');
+        $product_qty   = data_get($save_data,'quantity');
 
         // get quantity if it's already there and add it on
         ///get,has,remove,put are helper method for session
@@ -38,10 +38,10 @@ class SessionStorage implements StorageInterface
         {
             $old_qty=0;
         }
-        //$new_qty=$old_qty+$product_qty;
+        $new_qty=$old_qty+$product_qty;
         data_set($cart_data,'name',$product_name);
         data_set($cart_data,'product_id',$product_id);
-        data_set($cart_data,'quantity',$old_qty+1);
+        data_set($cart_data,'quantity',$new_qty);
         data_set($cart_data,'price',$product_price);
         data_set($cart_data,'total_price',$product_price*data_get($cart_data,'quantity'));
 
