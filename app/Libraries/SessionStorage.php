@@ -10,18 +10,12 @@ class SessionStorage implements StorageInterface
 
     private $cart_name='cart';
 
-    public function get()
+    public function getAll()
     {
         return gets($this->cart_name);
 
     }
-    public function getCount()
-    {
 
-        return count( ($this->cart_name));
-
-
-    }
     public function add(array $save_data)
     {
 
@@ -44,6 +38,7 @@ class SessionStorage implements StorageInterface
         {
             $old_qty=0;
         }
+        //$new_qty=$old_qty+$product_qty;
         data_set($cart_data,'name',$product_name);
         data_set($cart_data,'product_id',$product_id);
         data_set($cart_data,'quantity',$old_qty+1);
@@ -92,10 +87,14 @@ class SessionStorage implements StorageInterface
             $old_qty = gets($this->cart_name.'.'.$product_id.'.quantity');
             $old_qty-=1;
         }
-        else
-        {
-            $old_qty=0;
-        }
+       if($old_qty==0)
+       {
+           return $this->remove($product_id);
+
+
+       }
+       else
+       {
 
         $cart_data=$this->get();
         data_set($cart_data,$product_id.'.quantity',$old_qty);
@@ -104,14 +103,13 @@ class SessionStorage implements StorageInterface
         put($this->cart_name,$cart_data);
 
         return $this->getProductTotal($product_id);
+       }
 
     }
 
 
 
-
-
-    public function getProductTotal(int $product_id)
+    private function getProductTotal(int $product_id)
     {
         //echo $product_id;die;
         $cart_data=$this->get();
@@ -119,44 +117,6 @@ class SessionStorage implements StorageInterface
         return responseFormat($product_id,$cart_data);
 
     }
-
-
-    public function getCartTotal()
-    {
-        $cart_data=$this->get();
-        return responseFormat('',$cart_data);
-
-
-    }
-
-
-    public function getData($user_id)
-    {
-        $cart_data=$this->get();
-
-        //print_r($cart_data);die;
-        $return_data=array();
-        foreach($cart_data as $arr)
-        {
-            data_set($result_data,'product_id',data_get($arr,'product_id'));
-            data_set($result_data,'quantity',data_get($arr,'quantity'));
-            data_set($result_data,'customer_id',$user_id);
-            data_set($result_data,'created_at',date('Y-m-d H:i:s'));
-            data_set($result_data,'updated_id',date('Y-m-d H:i:s'));
-
-            $return_data[]=$result_data;
-        }
-        return $return_data;
-    }
-
-
-
-
-//    public function remove($key)
-//    {
-//        session()->forget($key);
-//    }
-
 
 
 

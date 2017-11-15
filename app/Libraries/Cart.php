@@ -83,17 +83,17 @@ class Cart
             return $this->storage->clear();
         }
     }
-    public function getData()
+    public function getAll()
     {
 
         if(isset($this->user_id) and $this->user_id!='')
         {
 
-            return $this->model->get() ;
+            return $this->model->getAll() ;
         }
         else
         {
-            return $this->storage->get();
+            return $this->storage->getAll();
         }
 
     }
@@ -121,23 +121,24 @@ class Cart
 
     public  function clearSession()
     {
-        return $this->storage->emptyCart();
+        return $this->storage->clear();
     }
     public function updateOnlogin()
     {
 
         if(isset($this->user_id) and $this->user_id!='')
         {
-            $cart_data=$this->storage->getData($this->user_id);
+            $cart_data=$this->storage->getAll();
             foreach ($cart_data as $value)
             {
 
                 $this->model->add($value);
 
-                $this->storage->clear();
+
 
 
             }
+            $this->storage->clear();
             return true;
         }
         else

@@ -40,7 +40,7 @@ class CartController extends Controller
     public function index()
     {
 
-        return View::make('cart')->with('cartdata',$this->cart->getData());
+        return View::make('cart')->with('cartdata',$this->cart->getAll());
     }
 
 
@@ -76,7 +76,7 @@ class CartController extends Controller
         }
 
     }
-    
+
     public function emptyCart()
     {
         $this->cart->clear();

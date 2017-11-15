@@ -36,13 +36,13 @@ class Cart extends Model
             ['product_id'=>$data['product_id'],'customer_id'=>$this->user_id],
             ['product_id'=>$data['product_id'],'customer_id'=>$this->user_id]
              )
-            ->increment('quantity');
+            ->increment('quantity',$data['quantity']);
 
 
 
     }
 
-    public function get()
+    public function getAll()
     {
 
 
@@ -72,7 +72,7 @@ class Cart extends Model
 
     }
 
-    public function getProductTotal(int $product_id)
+    private function getProductTotal(int $product_id)
     {
         //This function is used for send response when user update single product quantity
         return static::selectRaw('carts.product_id,sum(carts.quantity*product_prices.price) as total_price')

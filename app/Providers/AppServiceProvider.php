@@ -35,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind("App\Libraries\StorageInterface", "App\Libraries\SessionStorage");
+
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);
         }

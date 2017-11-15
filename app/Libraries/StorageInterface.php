@@ -11,8 +11,11 @@ interface StorageInterface
 
     public function remove(int $product_id);
 
+    public function getAll();
+
     public function clear();
 
+    public function decreseQuantity(int $product_id);
 
 
 }
