@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -26,15 +26,15 @@ class Cart extends Model
         $this->user_id=$user_id;
     }
 
-    public function addOrUpdate(int $product_id)
+    public function add(array $data)
     {
 
         // Quantity is here because if user select more than 1 product
 
 
         return static::query()->updateOrCreate(
-            ['product_id'=>$product_id,'customer_id'=>$this->user_id],
-            ['product_id'=>$product_id,'customer_id'=>$this->user_id]
+            ['product_id'=>$data['product_id'],'customer_id'=>$this->user_id],
+            ['product_id'=>$data['product_id'],'customer_id'=>$this->user_id]
              )
             ->increment('quantity');
 
@@ -61,11 +61,12 @@ class Cart extends Model
     //Update the quantity which user selected
     public function decreseQuntity(int $product_id)
     {
+        //echo $product_id;die;
         static::query()->decrement('quantity',1,['product_id'=>$product_id,'customer_id'=>$this->user_id]);
         return $this->getProductTotal($product_id);
     }
 
-    public function deletec(int $product_id)
+    public function remove(int $product_id)
     {
         return static::query()->where('product_id','=',$product_id)->where('customer_id','=',$this->user_id)->delete();
 

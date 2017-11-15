@@ -1,14 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductDetail extends Model
+class ProductPrice extends Model
 {
     //
     protected $fillable = [
-        'product_id','manufacturer', 'quantity', 'weight', 'description',
+        'product_id','price', 'special_price',
     ];
 
     public $timestamps = false;
@@ -18,6 +18,4 @@ class ProductDetail extends Model
         return $this->belongsTo(Product::class);
 
     }
-
-
 }

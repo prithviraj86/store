@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\CartLib;
+use App\Libraries\Cart;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
@@ -15,21 +16,21 @@ use Illuminate\Support\Facades\View;
 class CartController extends Controller
 {
 
-    private $cart_lib;
+    private $cart;
 
 
 
 
-    public function __construct(CartLib $cartlib)
+    public function __construct(Cart $cart)
     {
 
-        $this->cart_lib=$cartlib;
+        $this->cart=$cart;
 
 
         $this->middleware(function ($request, $next) {
             //echo Auth::id();die;
             $this->user_id=Auth::id();
-            $this->cart_lib->setUserId($this->user_id);
+            $this->cart->setUserId($this->user_id);
 
             return $next($request);
         });
@@ -39,14 +40,14 @@ class CartController extends Controller
     public function index()
     {
 
-        return View::make('cart')->with('cartdata',$this->cart_lib->getData());
+        return View::make('cart')->with('cartdata',$this->cart->getData());
     }
 
 
     public function store(Request $request)
     {
 
-        $result=$this->cart_lib->addToCart($request);
+        $result=$this->cart->add($request);
         if($result)
         {
           return redirect('/cart');
@@ -64,15 +65,16 @@ class CartController extends Controller
     public function update(Request $request)
     {
         //
-        return $this->cart_lib->decreseQuantity($request);
+        return $this->cart->decreseQuantity($request);
     }
 
 
     public function destroy(Request $request)
     {
 
-        //
-        $result=$this->cart_lib->removeProduct($request);
+
+        $result=$this->cart->remove($request);
+
         if($result)
         {
             return redirect('/cart');
@@ -86,13 +88,13 @@ class CartController extends Controller
 
     public function emptyCart()
     {
-        $this->cart_lib->emptyCart();
+        $this->cart->clear();
     }
 
     //This function  is used ,when user login and say no to add current(without login) cart product in his cart
     public function emptySession()
     {
-       $result= $this->cart_lib->emptySession();
+       $result= $this->cart->clearSession();
 
         if($result)
         {
@@ -113,7 +115,7 @@ class CartController extends Controller
     //This function  is used ,when user login and say Yes to add current(without login) cart product in his cart
     public function updateOnlogin()
     {
-        $result=$this->cart_lib->updateOnlogin();
+        $result=$this->cart->updateOnlogin();
         if($result)
         {
             return redirect('/');

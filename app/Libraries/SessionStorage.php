@@ -1,8 +1,11 @@
 <?php
 namespace App\Libraries;
+
+use App\Libraries\StorageInterface;
 use App\Helpers;
 
-class SessionCart
+
+class SessionStorage implements StorageInterface
 {
 
     private $cart_name='cart';
@@ -19,7 +22,7 @@ class SessionCart
 
 
     }
-    public function addToCart(array $save_data)
+    public function add(array $save_data)
     {
 
         $cart_data=array();
@@ -68,7 +71,18 @@ class SessionCart
 
 
     }
+    public function remove(int $product_id)
+    {
 
+        remove($this->cart_name.".".$product_id);
+        return true;
+
+    }
+    public function clear()
+    {
+
+        return remove($this->cart_name);
+    }
     public function decreseQuantity(int $product_id)
     {
 
@@ -95,13 +109,6 @@ class SessionCart
 
 
 
-    public function removeProduct($product_id)
-    {
-
-        remove($this->cart_name.".".$product_id);
-        return true;
-
-    }
 
 
     public function getProductTotal(int $product_id)
@@ -143,11 +150,7 @@ class SessionCart
     }
 
 
-    public function emptyCart()
-    {
 
-       return remove($this->cart_name);
-    }
 
 //    public function remove($key)
 //    {
