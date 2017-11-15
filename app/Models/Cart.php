@@ -72,6 +72,11 @@ class Cart extends Model
 
     }
 
+    public function clear()
+    {
+        return static::query()->where('customer_id','=',$this->user_id)->delete();
+    }
+
     private function getProductTotal(int $product_id)
     {
         //This function is used for send response when user update single product quantity
