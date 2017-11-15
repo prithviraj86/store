@@ -28,45 +28,33 @@ class Cart
         $this->model->setUserId($uid);
 
     }
-
-    public function getData()
-    {
-
-        if(isset($this->user_id) and $this->user_id!='')
-        {
-
-            return $this->model->get() ;
-        }
-        else
-        {
-            return $this->storage->get();
-        }
-
-    }
-
     public function add(Request $request)
     {
-        $request->validate([
-            'name'=>'required',
-            'price'=>'required|integer',
-            'product_id'=>'required|integer',
-        ]);
-        //$this->validate();
-        $save_data=array(
-            'product_id'=>$request->product_id,
-            'price'=>$request->price,
-            'name'=>$request->name
-        );
+
         if(isset($this->user_id) and $this->user_id!='')
         {
-
+            $request->validate([
+                'product_id'=>'required|integer',
+            ]);
+            //$this->validate();
+            $save_data=array('product_id'=>$request->product_id);
             return $this->model->add($save_data);
 
         }
         else
         {
 
-
+            $request->validate([
+                'name'=>'required',
+                'price'=>'required|integer',
+                'product_id'=>'required|integer',
+            ]);
+            //$this->validate();
+            $save_data=array(
+                'product_id'=>$request->product_id,
+                'price'=>$request->price,
+                'name'=>$request->name
+            );
             return $this->storage->add($save_data);
         }
 
@@ -95,6 +83,22 @@ class Cart
             return $this->storage->clear();
         }
     }
+    public function getData()
+    {
+
+        if(isset($this->user_id) and $this->user_id!='')
+        {
+
+            return $this->model->get() ;
+        }
+        else
+        {
+            return $this->storage->get();
+        }
+
+    }
+
+
     public function decreseQuantity(Request $request)
     {
 
