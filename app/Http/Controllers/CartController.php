@@ -60,15 +60,6 @@ class CartController extends Controller
 
 
     }
-
-
-    public function update(Request $request)
-    {
-        //
-        return $this->cart->decreseQuantity($request);
-    }
-
-
     public function destroy(Request $request)
     {
 
@@ -85,11 +76,22 @@ class CartController extends Controller
         }
 
     }
-
+    
     public function emptyCart()
     {
         $this->cart->clear();
     }
+
+    public function update(Request $request)
+    {
+        //
+        return $this->cart->decreseQuantity($request);
+    }
+
+
+
+
+
 
     //This function  is used ,when user login and say no to add current(without login) cart product in his cart
     public function emptySession()
