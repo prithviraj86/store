@@ -2,51 +2,52 @@
 namespace App\Libraries;
 
 
-use StorageInterface;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\DatabaseManager;
+use App\Models\Cart;
+use App\Models\User;
+use App\Libraries\StorageInterface;
+use App\Models\Product;
 
 
 class DBStorage implements StorageInterface
 {
-    private $db;
-    private $user_id;
-    public function __construct(DatabaseManager $db)
+
+    private $model;
+
+    public function __construct()
     {
-        $this->db=$db;
-    }
-
-    public function add(array $data)
-    {
-
-        $this->db->table('carts')->updateOrInsert(['product_id'=>$data['product_id'],'customer_id'=>$this->user_id],['product_id'=>$data['product_id'],'customer_id'=>$this->user_id,'quantity'=>$data['quantity']]);
-
-
 
     }
-    public function decreseQuantity(int $product_id)
+    public function setModel(Cart $cart,User $user)
     {
-        $this->db->table('carts')->where(['product_id'=>$product_id,'customer_id'=>$this->user_id])->decrement('quantity');
+
+        $this->model=$cart;
+        $this->model->setUserId($user->id);
+
+
     }
 
-    public function remove(int $product_id)
+    public function add(Product $product,int $quntity=0)
     {
-        $this->db->table('carts')
-                    ->where('product_id','=',$product_id)
-                    ->where('customer_id','=',$this->user_id)
-                    ->delete();
+        return $this->model->add($product,$quntity);
+    }
+    public function decreseQuantity(Product $product)
+    {
+        return $this->model->decreseQuantity($product->id);
+    }
+
+    public function remove(Product $product)
+    {
 
 
+        return $this->model->remove($product->id);
 
     }
     public function clear()
     {
-        $this->db->table('carts')
-            ->where('customer_id','=',$this->user_id)
-            ->delete();
+        return $this->model->clear();
     }
     public function getAll()
     {
-        $this->db->table('carts')->get();
+        return $this->model->getAll();
     }
 }

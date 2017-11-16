@@ -2,6 +2,7 @@
 namespace App\Libraries;
 
 use App\Libraries\StorageInterface;
+use App\Models\Product;
 use App\Helpers;
 
 
@@ -16,14 +17,15 @@ class SessionStorage implements StorageInterface
 
     }
 
-    public function add(array $save_data)
+    public function add(Product $product,int $quantity=0)
     {
 
         $cart_data=array();
-        $product_id    = data_get($save_data,'product_id');
-        $product_name  = data_get($save_data,'name');
-        $product_price = data_get($save_data,'price');
-        $product_qty   = data_get($save_data,'quantity');
+
+        $product_id    = $product->id;
+        $product_name  = $product->name;
+        $product_price = $product->productprice->price;
+        $product_qty   = $quantity;
 
         // get quantity if it's already there and add it on
         ///get,has,remove,put are helper method for session
@@ -66,10 +68,10 @@ class SessionStorage implements StorageInterface
 
 
     }
-    public function remove(int $product_id)
+    public function remove(Product $product)
     {
 
-        remove($this->cart_name.".".$product_id);
+        remove($this->cart_name.".".$product->product_id);
         return true;
 
     }
@@ -78,18 +80,19 @@ class SessionStorage implements StorageInterface
 
         return remove($this->cart_name);
     }
-    public function decreseQuantity(int $product_id)
+    public function decreseQuantity(Product $product)
     {
-
-        if(has($this->cart_name.'.'.$product_id))
+        //print_r(session($this->cart_name.'.'.$product->id));die;
+        if(has($this->cart_name.'.'.$product->id))
         {
 
-            $old_qty = gets($this->cart_name.'.'.$product_id.'.quantity');
+            $old_qty = gets($this->cart_name.'.'.$product->id.'.quantity');
             $old_qty-=1;
         }
+
        if($old_qty==0)
        {
-           return $this->remove($product_id);
+           return remove($this->cart_name.'.'.$product->id);
 
 
        }
@@ -97,12 +100,12 @@ class SessionStorage implements StorageInterface
        {
 
         $cart_data=$this->get();
-        data_set($cart_data,$product_id.'.quantity',$old_qty);
-        data_set($cart_data,$product_id.'.total_price',$old_qty*data_get($cart_data,$product_id.'.price'));
+        data_set($cart_data,$product->id.'.quantity',$old_qty);
+        data_set($cart_data,$product->id.'.total_price',$old_qty*data_get($cart_data,$product->id.'.price'));
 
         put($this->cart_name,$cart_data);
 
-        return $this->getProductTotal($product_id);
+        return $this->getProductTotal($product->id);
        }
 
     }
