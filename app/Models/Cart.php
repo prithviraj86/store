@@ -28,24 +28,15 @@ class Cart extends Model
 
     public function add(Product $product,int $quantity)
     {
-//        /dd($product);
-        // Quantity is here because if user select more than 1 product
-
-
         return static::query()->updateOrCreate(
             ['product_id'=>$product->id,'customer_id'=>$this->user_id],
             ['product_id'=>$product->id,'customer_id'=>$this->user_id]
              )
             ->increment('quantity',$quantity);
-
-
-
     }
 
     public function getAll()
     {
-
-
             return static::selectRaw('carts.product_id,products.name,product_prices.price,carts.quantity,sum(carts.quantity*product_prices.price) as total_price')
                 ->join('products','carts.product_id','=','products.id')
                 ->join('product_prices','product_prices.product_id','=','products.id')
@@ -53,8 +44,6 @@ class Cart extends Model
                 ->where('quantity','>',0)
                 ->groupBy('carts.product_id','products.name','carts.quantity','product_prices.price')
                 ->get()->toArray();
-
-
     }
 
 
@@ -62,7 +51,7 @@ class Cart extends Model
     //Update the quantity which user selected
     public function decreseQuantity(int $product_id)
     {
-        //echo $product_id;die;
+
         static::query()->where(['product_id'=>$product_id,'customer_id'=>$this->user_id])->decrement('quantity',1);
         static::query()->where(['product_id'=>$product_id,'customer_id'=>$this->user_id,'quantity'=>0])->delete();
         return $this->getProductTotal($product_id);
