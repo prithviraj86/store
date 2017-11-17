@@ -19,7 +19,7 @@ class SessionStorage implements StorageInterface
 
     public function add(Product $product,int $quantity=0)
     {
-
+        //print_r($product);die;
         $cart_data=array();
         // get quantity if it's already there and add it on
         ///get,has,remove,put are helper method for session
@@ -92,7 +92,7 @@ class SessionStorage implements StorageInterface
        else
        {
 
-        $cart_data=$this->get();
+        $cart_data=$this->getAll();
         data_set($cart_data,$product->id.'.quantity',$old_qty);
         data_set($cart_data,$product->id.'.total_price',$old_qty*data_get($cart_data,$product->id.'.price'));
 
@@ -108,7 +108,7 @@ class SessionStorage implements StorageInterface
     private function getProductTotal(int $product_id)
     {
         //echo $product_id;die;
-        $cart_data=$this->get();
+        $cart_data=$this->getAll();
         //print_r($cart_data);die;
         return responseFormat($product_id,$cart_data);
 

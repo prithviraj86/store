@@ -52,7 +52,7 @@ class CartController extends Controller
     {
 
 
-
+      //  var_dump($request);die;
         $product=$this->isProduct($request->product_id);
 
         $result=$this->cart->add($product,$request->quantity);
@@ -114,43 +114,28 @@ class CartController extends Controller
         }
     }
 
+    public function setCart()
+    {
+        return view('setcart');
+    }
+    public function updateOnlogin()
+    {
+        //dd($this->cart);
+        $sessionData=session('cart');//This Wrong code it's temporary
+        foreach($sessionData as $value)
+        {
+            $product=$this->isProduct($value['product_id']);
+            //echo $value['quantity'];die;
+
+            $result=$this->cart->add($product,$value['quantity']);
+        }
+
+        if($result)
+        {
+            return redirect('/');
+        }
 
 
-
-    //This function  is used ,when user login and say no to add current(without login) cart product in his cart
-//    public function emptySession()
-//    {
-//       $result= $this->cart->clearSession();
-//
-//        if($result)
-//        {
-//            return redirect('/');
-//        }
-//        else
-//        {
-//            return Redirect::back()->withErrors(['Cart not empty']);
-//        }
-//    }
-//
-//
-//    public function setCart()
-//    {
-//        return view('setcart');
-//    }
-//
-//    //This function  is used ,when user login and say Yes to add current(without login) cart product in his cart
-//    public function updateOnlogin()
-//    {
-//        $result=$this->cart->updateOnlogin();
-//        if($result)
-//        {
-//            return redirect('/');
-//        }
-//        else
-//        {
-//            return Redirect::back()->withErrors(['Cart not updated']);
-//        }
-//
-//    }
+    }
 
 }

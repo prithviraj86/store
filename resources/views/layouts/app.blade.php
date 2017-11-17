@@ -27,35 +27,70 @@
         {
             $p_block="product_"+pid;
         }
-       function  updatecart(pid,quantity)
+       function  updatecart(pid,quantity,type)
         {
 
 
             var token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
+            if(type=="desc")
+            {
+                $.ajax({
 
-                type:'POST',
-                url:"/cart/update",
-                dataType: 'JSON',
-                data: {
-                    "_method": 'POST',
-                    "_token": token,
-                    "product_id": pid,
-                    "quantity": quantity,
-                },
-                success:function(data){
-                    console.log('sucess');
-                    console.log(data);
+                    type:'POST',
+                    url:"/cart/update",
+                    dataType: 'JSON',
+                    data: {
+                        "_method": 'POST',
+                        "_token": token,
+                        "product_id": pid,
+                        "quantity": 1,
+                    },
+                    success:function(data){
+                        console.log('sucess');
+                        console.log(data);
 
-                    $("#table").load("data");
-                },
-                error:function(data){
-                    console.log('error');
-                    console.log(data);
-                    console.log(data.length);
-                    $("#table").load("data");
-                },
-            });
+                        $("#table").load("data");
+                    },
+                    error:function(data){
+                        console.log('error');
+                        console.log(data);
+                        console.log(data.length);
+                        $("#table").load("data");
+                    },
+                });
+                $("#quantity").html(parseInt($("#quantity").html())-1)
+            }
+            else if(type=="inc")
+            {
+
+                $.ajax({
+
+                    type:'POST',
+                    url:"/cart/store",
+                    dataType: 'JSON',
+                    data: {
+                        "_method": 'POST',
+                        "_token": token,
+                        "product_id": pid,
+                        "quantity": 1 ,
+                    },
+                    success:function(data){
+                        console.log('sucess');
+                        console.log(data);
+
+                        $("#table").load("data");
+                    },
+                    error:function(data){
+                        console.log('error');
+                        console.log(data);
+                        console.log(data.length);
+                        $("#table").load("data");
+                    },
+                });
+                $("#quantity").html(parseInt($("#quantity").html())+1)
+            }
+
+
         }
     </script>
 </head>

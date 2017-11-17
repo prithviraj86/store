@@ -22,6 +22,7 @@ class Cart
 
     public function add(Product $product,int $quantity)
     {
+
          return $this->storage->add($product,$quantity);
 
 
@@ -58,29 +59,22 @@ class Cart
     {
         return $this->storage->clear();
     }
-//    public function updateOnlogin()
-//    {
-//
-//        if(isset($this->user_id) and $this->user_id!='')
-//        {
-//            $cart_data=$this->storage->getAll();
-//            foreach ($cart_data as $value)
-//            {
-//
-//                $this->model->add($value);
-//
-//
-//
-//
-//            }
-//            $this->storage->clear();
-//            return true;
-//        }
-//        else
-//        {
-//            return false;
-//        }
-//
-//    }
+    //    public function updateOnlogin()
+    //    {
+    //
+    //
+    //            $cart_data=session('cart');
+    //            foreach ($cart_data as $value)
+    //            {
+    //
+    //
+    //
+    //            }
+    //            $this->storage->add();
+    //            $this->storage->clear();
+    //            return true;
+    //
+    //
+    //    }
 
 }

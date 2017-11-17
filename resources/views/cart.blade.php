@@ -26,16 +26,10 @@
 
 
             </div>
-            <div class="col-md-1">
-                <select id="quantity" name="quantity" class="form-control" onchange="return updatecart({{$value['product_id']}},this.value);">
-                    <option selected>{{$value['quantity']}}</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success glyphicon-minus pull-left" style="width: 30px;" onclick="return updatecart({{$value['product_id']}},this.value,'desc');"></button>
+                <label id="quantity" class="pull-left" style="margin-left: 10px; margin-right: 10px;">{{$value['quantity']}}</label>
+                <button type="button" class="btn btn-success glyphicon-plus pull-left" style="width: 30px;" onclick="return updatecart({{$value['product_id']}},this.value,'inc');"></button>
 
             </div>
             <div class="col-md-1">

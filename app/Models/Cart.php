@@ -37,6 +37,7 @@ class Cart extends Model
 
     public function getAll()
     {
+
             return static::selectRaw('carts.product_id,products.name,product_prices.price,carts.quantity,sum(carts.quantity*product_prices.price) as total_price')
                 ->join('products','carts.product_id','=','products.id')
                 ->join('product_prices','product_prices.product_id','=','products.id')
