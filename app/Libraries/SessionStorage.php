@@ -63,8 +63,7 @@ class SessionStorage implements StorageInterface
     }
     public function remove(Product $product)
     {
-
-        remove($this->cart_name.".".$product->product_id);
+        remove($this->cart_name.".".$product->id);
         return true;
 
     }

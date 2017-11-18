@@ -121,7 +121,7 @@ class CartController extends Controller
     public function updateOnlogin()
     {
         //dd($this->cart);
-        $sessionData=session('cart');//This Wrong code it's temporary
+        $sessionData=session('cart');//This Wrong code it's temporary~
         foreach($sessionData as $value)
         {
             $product=$this->isProduct($value['product_id']);

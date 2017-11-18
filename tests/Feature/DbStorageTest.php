@@ -115,28 +115,28 @@ class DbStorageTest extends TestCase
         $this->assertArrayHasKey('quantity',$dbdata[0]);
         $this->assertArrayHasKey('total_price',$dbdata[0]);
     }
-    public function testRemove()
-    {
-        $user=User::query()->find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-        $prodct=new Product();
-        $productData=$prodct->findById(8);
-        $dbstorage->remove($productData);
-        $cartData=Cart::query()->find($productData->id);
-        $this->assertEmpty($cartData);
-
-    }
-    public function testClear()
-    {
-        $user=User::query()->find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-
-    //    $dbstorage->clear();
-        $cartData=Cart::query()->get();
-        $this->assertEmpty($cartData);
-    }
+//    public function testRemove()
+//    {
+//        $user=User::query()->find(1);
+//        $cart=new Cart();
+//        $dbstorage=new DBStorage();
+//        $dbstorage->setModel($cart,$user);
+//        $prodct=new Product();
+//        $productData=$prodct->findById(8);
+//        $dbstorage->remove($productData);
+//        $cartData=Cart::query()->find($productData->id);
+//        $this->assertEmpty($cartData);
+//
+//    }
+//    public function testClear()
+//    {
+//        $user=User::query()->find(1);
+//        $cart=new Cart();
+//        $dbstorage=new DBStorage();
+//        $dbstorage->setModel($cart,$user);
+//
+//        $dbstorage->clear();
+//        $cartData=Cart::query()->get();
+//        $this->assertEmpty($cartData);
+//    }
 }
