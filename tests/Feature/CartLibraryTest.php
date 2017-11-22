@@ -16,23 +16,26 @@ class CartLibraryTest extends TestCase
      *
      * @return void
      */
+    private $user;
+    private $storage_db;
+    private $storage_session;
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user=User::find(1);
+        $this->storage_db=CartStorageFactory::getStorage($this->user);
+        $this->storage_session=CartStorageFactory::getStorage();
+    }
     public function testAddWithLogin()
     {
-        $user=User::find(1);
-        $storage=CartStorageFactory::getStorage($user);
-        $cart=new Cart($storage);
+        $cart=new Cart($this->storage_db);
         $productData=Product::find(11);
-
         $this->assertEquals(1,$cart->add($productData,1));
     }
     public function testAddWithOutLogin()
     {
 
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage();
-        $cart=new Cart($storage);
-
-
+        $cart=new Cart($this->storage_session);
         $productData=Product::find(11);
         $cart->add($productData,1);
 
@@ -45,9 +48,8 @@ class CartLibraryTest extends TestCase
     }
     public function testDecreseQuantityWithLogin()
     {
-        $user=User::find(1);
-        $storage=CartStorageFactory::getStorage($user);
-        $cart=new Cart($storage);
+
+        $cart=new Cart($this->storage_db);
 
         $cart->clear();
         $productData=Product::find(11);
@@ -59,8 +61,8 @@ class CartLibraryTest extends TestCase
     }
     public function testDecreseQuantityWithOurlogin()
     {
-        $storage=CartStorageFactory::getStorage();
-        $cart=new Cart($storage);
+
+        $cart=new Cart($this->storage_session);
         $cart->clear();
         $productData=Product::find(11);
         $cart->add($productData,2);
@@ -71,9 +73,8 @@ class CartLibraryTest extends TestCase
     }
     public function testRemoveWithLogin()
     {
-        $user=User::find(1);
-        $storage=CartStorageFactory::getStorage($user);
-        $cart=new Cart($storage);
+
+        $cart=new Cart($this->storage_db);
 
         $cart->clear();
         $productData=Product::find(11);
@@ -89,8 +90,8 @@ class CartLibraryTest extends TestCase
     public function testRemoveWithOutLogin()
     {
 
-        $storage=CartStorageFactory::getStorage();
-        $cart=new Cart($storage);
+
+        $cart=new Cart($this->storage_session);
 
         $cart->clear();
         $productData=Product::find(11);
@@ -105,9 +106,9 @@ class CartLibraryTest extends TestCase
     }
     public function testGetAllWithLogin()
     {
-        $user=User::find(1);
-        $storage=CartStorageFactory::getStorage($user);
-        $cart=new Cart($storage);
+
+
+        $cart=new Cart($this->storage_db);
 
         $cart->clear();
 
@@ -124,8 +125,8 @@ class CartLibraryTest extends TestCase
     }
     public function testGetAllWithOutLogin()
     {
-        $storage=CartStorageFactory::getStorage();
-        $cart=new Cart($storage);
+
+        $cart=new Cart($this->storage_session);
 
         $cart->clear();
         $productData=Product::find(11);

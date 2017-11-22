@@ -22,6 +22,7 @@ class DBStorage implements StorageInterface
 
     public function add(Product $product,int $quntity=0)
     {
+
         return $this->model->add($product,$quntity);
     }
 

@@ -18,7 +18,7 @@ class CartStorageFactoryTest extends TestCase
      */
     public function testDBStorageInstance()
     {
-        $user=User::query()->find(1);
+        $user=User::find(1);
         $cartfactory=new CartStorageFactory();
         $dbstorage=$cartfactory->getStorage($user);
         //dd($dbstorage);

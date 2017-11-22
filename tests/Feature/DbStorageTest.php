@@ -16,46 +16,38 @@ class DbStorageTest extends TestCase
      *
      * @return void
      */
+    private $user;
+    private  $cart;
+    private $dbstorage;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user=User::find(1);
+        $this->cart=new Cart();
+        $this->dbstorage=new DBStorage();
+        $this->dbstorage->setModel($this->cart,$this->user);
+    }
     public function testSetmodel()
     {
-        $user=User::query()->find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-
-        $this->assertEquals(1,$dbstorage->setModel($cart,$user));
+        $this->assertEquals(1,$this->dbstorage->setModel($this->cart, $this->user));
     }
     public function testAddExistesProductWithQuantityOne()
     {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-
         $productData=Product::find(9);
-        //echo $dbstorage->add($productData,1);die;
-        $this->assertEquals(1,$dbstorage->add($productData,1));
+        $this->assertEquals(1,$this->dbstorage->add($productData,1));
     }
     public function testAddExistesProductWithQuantityIsMoreThanOne()
     {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
 
         $productData=Product::find(9);
-
-        $this->assertEquals(1,$dbstorage->add($productData,3));
+        $this->assertEquals(1,$this->dbstorage->add($productData,3));
     }
     public function testAddNewProduct()
     {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
 
         $productData=Product::find(10);
-
-        $this->assertEquals(1,$dbstorage->add($productData,1));
+        $this->assertEquals(1,$this->dbstorage->add($productData,1));
     }
     public function testAddExistesProductWithQuantityZero()
     {
@@ -66,14 +58,9 @@ class DbStorageTest extends TestCase
 
 //        FAILURES!
 //        Tests: 5, Assertions: 5, Failures: 1.
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-
         $productData=Product::find(8);
 
-        $this->assertEquals(1,$dbstorage->add($productData,1));
+        $this->assertEquals(1,$this->dbstorage->add($productData,1));
     }
     public function testAddExistesProductWithOutQuantity()
     {
@@ -81,34 +68,22 @@ class DbStorageTest extends TestCase
 //        Failed asserting that 0 matches expected 1.
 //
 //        E:\xampp\htdocs\store\tests\Feature\DbStorageTest.php:87
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
 
         $productData=Product::find(8);
 
-        $this->assertEquals(1,$dbstorage->add($productData,1));
+        $this->assertEquals(1,$this->dbstorage->add($productData,1));
     }
     public function testDecreseQuantity()
     {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
 
         $productData=Product::find(8);
-        $dbdesc=$dbstorage->decreseQuantity($productData);
-       $this->assertArrayHasKey('product_id',$dbdesc[0]);
-       $this->assertArrayHasKey('total_price',$dbdesc[0]);
+        $dbdesc=$this->dbstorage->decreseQuantity($productData);
+        $this->assertArrayHasKey('product_id',$dbdesc[0]);
+        $this->assertArrayHasKey('total_price',$dbdesc[0]);
     }
     public function testGetAll()
     {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-        $dbdata=$dbstorage->getAll();
+        $dbdata=$this->dbstorage->getAll();
         $this->assertArrayHasKey('product_id',$dbdata[0]);
         $this->assertArrayHasKey('name',$dbdata[0]);
         $this->assertArrayHasKey('price',$dbdata[0]);
@@ -117,26 +92,17 @@ class DbStorageTest extends TestCase
     }
     public function testRemove()
     {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-
         $productData=Product::find(8);
-        $dbstorage->remove($productData);
+        $this->dbstorage->remove($productData);
         $cartData=Cart::find($productData->id);
+
         $this->assertEmpty($cartData);
 
     }
-    public function testClear()
-    {
-        $user=User::find(1);
-        $cart=new Cart();
-        $dbstorage=new DBStorage();
-        $dbstorage->setModel($cart,$user);
-
-        $dbstorage->clear();
-        $cartData=Cart::all();
-        $this->assertEmpty($cartData);
-    }
+//    public function testClear()
+//    {
+//        $this->dbstorage->clear();
+//        $cartData=Cart::all();
+//        $this->assertEmpty($cartData);
+//    }
 }

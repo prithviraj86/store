@@ -14,34 +14,39 @@ class SessionStorageTest extends TestCase
      *
      * @return void
      */
+    private $session_storage;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->session_storage=new SessionStorage();
+    }
     public function testAdd()
     {
-        $session_storage=new SessionStorage();
+
 
         $productData=Product::find(9);
 
-        $this->assertTrue($session_storage->add($productData,1));
+        $this->assertTrue($this->session_storage->add($productData,1));
     }
     public function testAddExistingProduct()
     {
-        $session_storage=new SessionStorage();
-
         $productData=Product::find(9);
-        $session_storage->add($productData,1);
-        $session_storage->add($productData,1);
+        $this->session_storage->add($productData,1);
+        $this->session_storage->add($productData,1);
 
-        $session_data=$session_storage->getAll();
+        $session_data=$this->session_storage->getAll();
         $this->assertEquals(2,$session_data[9]['quantity']);
     }
     public function testAddExistingProductWithMoreThenOneQuantity()
     {
-        $session_storage=new SessionStorage();
+
 
         $productData=Product::find(9);
-        $session_storage->add($productData,1);
-        $session_storage->add($productData,3);
+        $this->session_storage->add($productData,1);
+        $this->session_storage->add($productData,3);
 
-        $session_data=$session_storage->getAll();
+        $session_data=$this->session_storage->getAll();
         $this->assertEquals(4,$session_data[9]['quantity']);
     }
     public function testAddExistingProductWithOutQuantity()
@@ -58,34 +63,28 @@ class SessionStorageTest extends TestCase
 //
 //        FAILURES!
 //            Tests: 16, Assertions: 25, Failures: 2.
-        $session_storage=new SessionStorage();
-
         $productData=Product::find(9);
-        $session_storage->add($productData);
+        $this->session_storage->add($productData);
 
-        $session_data=$session_storage->getAll();
+        $session_data=$this->session_storage->getAll();
         $this->assertEquals(0,$session_data[9]['quantity']);
     }
     public function testDecreseQuantity()
     {
-        $session_storage=new SessionStorage();
-
         $productData=Product::find(9);
-        $session_storage->add($productData,1);
-        $session_storage->add($productData,3);
-        $session_storage->decreseQuantity($productData);
+        $this->session_storage->add($productData,1);
+        $this->session_storage->add($productData,3);
+        $this->session_storage->decreseQuantity($productData);
 
-        $session_data=$session_storage->getAll();
+        $session_data=$this->session_storage->getAll();
         $this->assertEquals(3,$session_data[9]['quantity']);
     }
     public function testGetAll()
     {
-        $session_storage=new SessionStorage();
-
         $productData=Product::find(9);
 
-        $session_storage->add($productData,1);
-        $session_data=$session_storage->getAll();
+        $this->session_storage->add($productData,1);
+        $session_data=$this->session_storage->getAll();
 
         $this->assertArrayHasKey('product_id',$session_data[9]);
         $this->assertArrayHasKey('name',$session_data[9]);
@@ -96,12 +95,11 @@ class SessionStorageTest extends TestCase
 //    public function testRemove()
 //    {
 //
-//        $session_storage=new SessionStorage();
 //        $prodct=new Product();
 //        $productData=$prodct->findById(9);
-//        $session_storage->add($productData,1);
-//        $session_storage->remove($productData);
-//        $session_data=$session_storage->getAll();
+//        $this->session_storage->add($productData,1);
+//        $this->session_storage->remove($productData);
+//        $this->session_data=$session_storage->getAll();
 //        $this->assertArrayNotHasKey($productData->id,$session_data);
 ////        3) Tests\Feature\SessionStorageTest::testRemove
 ////        Failed asserting that an array does not have the key 9.

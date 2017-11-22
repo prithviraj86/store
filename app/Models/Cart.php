@@ -28,6 +28,7 @@ class Cart extends Model
 
     public function add(Product $product,int $quantity)
     {
+
         return static::updateOrCreate(
             ['product_id'=>$product->id,'customer_id'=>$this->user_id],
             ['product_id'=>$product->id,'customer_id'=>$this->user_id]

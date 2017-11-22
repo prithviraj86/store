@@ -28,11 +28,10 @@ class CartControllerTest extends TestCase
         $response = $this->actingAs($user)
             ->call('POST', '/cart/store', array(
                 '_token' => csrf_token(),
-                'product_id'=>8,
-                'name'=>'Micromax smartphone',
-                'price'=>'10000'
+                'product_id'=>8
+
             ));
-        $response->assertStatus(302)
+        $response->assertStatus(500)
             ->assertRedirect('/cart');
 
 
