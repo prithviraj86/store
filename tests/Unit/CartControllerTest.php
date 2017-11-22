@@ -1,40 +1,42 @@
 <?php
-//
-//namespace Tests\Unit;
-//
-//use App\User;
-//use Tests\TestCase;
-//use Illuminate\Foundation\Testing\RefreshDatabase;
-//
-//class CartControllerTest extends TestCase
-//{
-//    /**
-//     * A basic test example.
-//     *
-//     * @return void
-//     */
-//    public function testindex()
-//    {
-//        //    $response = $this->call('GET', '/cart');
-//        $this->call('get','/cart')
-//            ->assertViewIs('cart');
-//    }
-//    public function testStoreAfterlogin()
-//    {
-//        $user = factory(User::class)->create();
-//
-//        $response = $this->actingAs($user)
-//            ->call('POST', '/cart/store', array(
-//                '_token' => csrf_token(),
-//                'product_id'=>8,
-//                'name'=>'Micromax smartphone',
-//                'price'=>'10000'
-//            ));
-//        $response->assertStatus(302)
-//            ->assertRedirect('/cart');
-//
-//
-//    }
+
+namespace Tests\Unit;
+
+
+use App\Models\User;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+
+class CartControllerTest extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testindex()
+    {
+        //    $response = $this->call('GET', '/cart');
+        $this->call('get','/cart')
+            ->assertViewIs('cart');
+    }
+    public function testStoreAfterlogin()
+    {
+        $user =User::find(1);
+
+        $response = $this->actingAs($user)
+            ->call('POST', '/cart/store', array(
+                '_token' => csrf_token(),
+                'product_id'=>8,
+                'name'=>'Micromax smartphone',
+                'price'=>'10000'
+            ));
+        $response->assertStatus(302)
+            ->assertRedirect('/cart');
+
+
+    }
 //    public function testStoreWithOutlogin()
 //    {
 //
@@ -68,4 +70,4 @@
 //        $response->assertRedirect('/cart');
 //
 //    }
-//}
+}

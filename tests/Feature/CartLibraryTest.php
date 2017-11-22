@@ -18,13 +18,10 @@ class CartLibraryTest extends TestCase
      */
     public function testAddWithLogin()
     {
-        $user=User::query()->find(1);
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage($user);
+        $user=User::find(1);
+        $storage=CartStorageFactory::getStorage($user);
         $cart=new Cart($storage);
-
-        $product=new Product();
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
 
         $this->assertEquals(1,$cart->add($productData,1));
     }
@@ -35,9 +32,10 @@ class CartLibraryTest extends TestCase
         $storage=$cartfactory->getStorage();
         $cart=new Cart($storage);
 
-        $product=new Product();
-        $productData=$product->findById(11);
+
+        $productData=Product::find(11);
         $cart->add($productData,1);
+
         $data=$cart->getAll();
         $this->assertArrayHasKey('product_id',$data[11]);
         $this->assertArrayHasKey('name',$data[11]);
@@ -47,13 +45,12 @@ class CartLibraryTest extends TestCase
     }
     public function testDecreseQuantityWithLogin()
     {
-        $user=User::query()->find(1);
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage($user);
+        $user=User::find(1);
+        $storage=CartStorageFactory::getStorage($user);
         $cart=new Cart($storage);
+
         $cart->clear();
-        $product=new Product();
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
         $cart->add($productData,2);
         $cart->decreseQuantity($productData);
         $data=$cart->getAll();
@@ -62,13 +59,10 @@ class CartLibraryTest extends TestCase
     }
     public function testDecreseQuantityWithOurlogin()
     {
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage();
+        $storage=CartStorageFactory::getStorage();
         $cart=new Cart($storage);
-
-        $product=new Product();
         $cart->clear();
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
         $cart->add($productData,2);
         $cart->decreseQuantity($productData);
         $data=$cart->getAll();
@@ -77,18 +71,16 @@ class CartLibraryTest extends TestCase
     }
     public function testRemoveWithLogin()
     {
-        $user=User::query()->find(1);
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage($user);
+        $user=User::find(1);
+        $storage=CartStorageFactory::getStorage($user);
         $cart=new Cart($storage);
 
-        $product=new Product();
         $cart->clear();
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
         $cart->add($productData,2);
-        $productData=$product->findById(10);
+        $productData=Product::find(10);
         $cart->add($productData,2);
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
         $cart->remove($productData);
         $data=$cart->getAll();
         //print_r($data);die;
@@ -97,17 +89,15 @@ class CartLibraryTest extends TestCase
     public function testRemoveWithOutLogin()
     {
 
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage();
+        $storage=CartStorageFactory::getStorage();
         $cart=new Cart($storage);
 
-        $product=new Product();
         $cart->clear();
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
         $cart->add($productData,2);
-        $productData=$product->findById(10);
+        $productData=Product::find(10);
         $cart->add($productData,1);
-        $productData=$product->findById(11);
+        $productData=Product::find(11);
         $cart->remove($productData);
         $data=$cart->getAll();
         //print_r($data);die;
@@ -115,34 +105,32 @@ class CartLibraryTest extends TestCase
     }
     public function testGetAllWithLogin()
     {
-        $user=User::query()->find(1);
-        $cartfactory=new CartStorageFactory();
-        $storage=$cartfactory->getStorage($user);
+        $user=User::find(1);
+        $storage=CartStorageFactory::getStorage($user);
         $cart=new Cart($storage);
 
-        $product=new Product();
         $cart->clear();
-        $productData=$product->findById(11);
+
+
+        $productData=Product::find(11);
         $cart->add($productData,1);
-        $productData=$product->findById(10);
+        $productData=Product::find(10);
         $cart->add($productData,1);
-        $productData=$product->findById(12);//Illuminate\Database\Eloquent\ModelNotFoundException: No query results for model [App\Models\Product] 12
+        $productData=Product::find(8);
         $cart->add($productData,2);
         $data=$cart->getAll();
 
-        $this->assertGreaterThanOrEqual(0, count($data));
+        $this->assertGreaterThanOrEqual(1, count($data));
     }
     public function testGetAllWithOutLogin()
     {
-        $cartfactory = new CartStorageFactory();
-        $storage = $cartfactory->getStorage();
-        $cart = new Cart($storage);
+        $storage=CartStorageFactory::getStorage();
+        $cart=new Cart($storage);
 
-        $product = new Product();
         $cart->clear();
-        $productData = $product->findById(11);
+        $productData=Product::find(11);
         $cart->add($productData, 3);
-        $productData = $product->findById(8);
+        $productData=Product::find(8);
         $cart->add($productData, 2);
 
 

@@ -30,10 +30,7 @@ class Product extends Model
     {
         return $this->hasMany(Cart::class);
     }
-    public function findById($id)
-    {
-        return static ::query()->findOrFail($id);
-    }
+
 //    public function addProduct(Product $product)
 //    {
 //

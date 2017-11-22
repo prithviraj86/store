@@ -19,8 +19,6 @@ class CartController extends Controller
 {
 
     private $cart;
-    private $user;
-
 
 
     public function __construct()
@@ -28,8 +26,8 @@ class CartController extends Controller
 
         $this->middleware(function ($request, $next) {
 
-            $this->user=Auth::user();
-            $storage=CartStorageFactory::getStorage($this->user);
+            $user=Auth::user();
+            $storage=CartStorageFactory::getStorage($user);
             $this->cart=new Cart($storage);
 
             return $next($request);
@@ -52,7 +50,7 @@ class CartController extends Controller
     {
 
 
-      //  var_dump($request);die;
+
         $product=$this->isProduct($request->product_id);
 
         $result=$this->cart->add($product,$request->quantity);
@@ -104,14 +102,15 @@ class CartController extends Controller
     {
         try
         {
-            $product=new Product();
-            return $product->findById($id);
+
+            $product= Product::find($id);
 
         }
         catch (Exception $e)
         {
             throwException($e->getMessage());
         }
+        return $product;
     }
 
     public function setCart()

@@ -11,15 +11,15 @@ class Cart extends Model
     private $user_id;
     //
     protected $fillable = [
-        'product_id', 'customer_id', 'session_id',
+        'product_id', 'customer_id'
     ];
 
 
-    public function product()
-    {
-        return $this->belongsToMany(Product::class);
-
-    }
+//    public function product()
+//    {
+//        return $this->belongsToMany(Product::class);
+//
+//    }
 
     public function setUserId($user_id)
     {
@@ -28,7 +28,7 @@ class Cart extends Model
 
     public function add(Product $product,int $quantity)
     {
-        return static::query()->updateOrCreate(
+        return static::updateOrCreate(
             ['product_id'=>$product->id,'customer_id'=>$this->user_id],
             ['product_id'=>$product->id,'customer_id'=>$this->user_id]
              )
@@ -53,20 +53,20 @@ class Cart extends Model
     public function decreseQuantity(int $product_id)
     {
 
-        static::query()->where(['product_id'=>$product_id,'customer_id'=>$this->user_id])->decrement('quantity',1);
-        static::query()->where(['product_id'=>$product_id,'customer_id'=>$this->user_id,'quantity'=>0])->delete();
+        static::where(['product_id'=>$product_id,'customer_id'=>$this->user_id])->decrement('quantity',1);
+        static::where(['product_id'=>$product_id,'customer_id'=>$this->user_id,'quantity'=>0])->delete();
         return $this->getProductTotal($product_id);
     }
 
     public function remove(int $product_id)
     {
-        return static::query()->where('product_id','=',$product_id)->where('customer_id','=',$this->user_id)->delete();
+        return static::where('product_id','=',$product_id)->where('customer_id','=',$this->user_id)->delete();
 
     }
 
     public function clear()
     {
-        return static::query()->where('customer_id','=',$this->user_id)->delete();
+        return static::where('customer_id','=',$this->user_id)->delete();
     }
 
     private function getProductTotal(int $product_id)

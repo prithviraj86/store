@@ -21,8 +21,7 @@ class SessionStorage implements StorageInterface
     {
         //print_r($product);die;
         $cart_data=array();
-        // get quantity if it's already there and add it on
-        ///get,has,remove,put are helper method for session
+
 
         if(has($this->cart_name.'.'.$product->id))
         {
@@ -53,7 +52,9 @@ class SessionStorage implements StorageInterface
                 put($this->cart_name.'.'.$product->id,$cart_data);
             }
 
-        }else{
+        }
+        else
+        {
             put($this->cart_name.'.'.$product->id,$cart_data);
         }
         return true;

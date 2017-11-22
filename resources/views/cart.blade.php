@@ -7,7 +7,12 @@
         <?php //dd($cartdata);die;//echo count($cartdata); ?>
 
         @if((isset($cartdata) and count($cartdata)==0) or (!isset($cartdata)))
-            <h3>Cart Empty</h3>
+            <h3>Your Shopping Cart is empty.</h3>
+            <p>
+                Your Shopping Cart lives to serve. Give it purpose--fill it with books, CDs, videos, DVDs, electronics, and more. If you already have an account, Sign In to see your Cart.
+                Continue shopping on the Amazon.in homepage, learn about today's deals, or visit your Wish List.<br>
+                The price and availability of items at Amazon.in are subject to change. The shopping cart is a temporary place to store a list of your items and reflects each item's most recent price.
+                Do you have a promotional code? We'll ask you to enter your claim code when it's time to pay.</p>
             <a href="/"  >
                 <button style="cursor: pointer;" class="btn btn-primary">Continue Shopping</button>
             </a>

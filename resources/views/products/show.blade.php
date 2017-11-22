@@ -4,9 +4,16 @@
         <div class="container">
 
             <div class="row">
+
                 @if($errors->any())
                     <h4 style="color:red;">{{$errors->first()}}</h4>
                 @endif
+                @if(count($productdata) ==0)
+
+
+                <h4 style="color:red;"> Not product found</h4>
+
+                @else if
                 <div class="card">
 
                     <h2>{{$productdata->name}}</h2>
@@ -45,6 +52,7 @@
                     @endif
 
                 </div>
+                @endif
             </div>
 
 

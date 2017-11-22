@@ -17,16 +17,16 @@ class SessionStorageTest extends TestCase
     public function testAdd()
     {
         $session_storage=new SessionStorage();
-        $prodct=new Product();
-        $productData=$prodct->findById(9);
+
+        $productData=Product::find(9);
 
         $this->assertTrue($session_storage->add($productData,1));
     }
     public function testAddExistingProduct()
     {
         $session_storage=new SessionStorage();
-        $prodct=new Product();
-        $productData=$prodct->findById(9);
+
+        $productData=Product::find(9);
         $session_storage->add($productData,1);
         $session_storage->add($productData,1);
 
@@ -36,8 +36,8 @@ class SessionStorageTest extends TestCase
     public function testAddExistingProductWithMoreThenOneQuantity()
     {
         $session_storage=new SessionStorage();
-        $prodct=new Product();
-        $productData=$prodct->findById(9);
+
+        $productData=Product::find(9);
         $session_storage->add($productData,1);
         $session_storage->add($productData,3);
 
@@ -59,8 +59,8 @@ class SessionStorageTest extends TestCase
 //        FAILURES!
 //            Tests: 16, Assertions: 25, Failures: 2.
         $session_storage=new SessionStorage();
-        $prodct=new Product();
-        $productData=$prodct->findById(9);
+
+        $productData=Product::find(9);
         $session_storage->add($productData);
 
         $session_data=$session_storage->getAll();
@@ -69,8 +69,8 @@ class SessionStorageTest extends TestCase
     public function testDecreseQuantity()
     {
         $session_storage=new SessionStorage();
-        $prodct=new Product();
-        $productData=$prodct->findById(9);
+
+        $productData=Product::find(9);
         $session_storage->add($productData,1);
         $session_storage->add($productData,3);
         $session_storage->decreseQuantity($productData);
@@ -81,8 +81,8 @@ class SessionStorageTest extends TestCase
     public function testGetAll()
     {
         $session_storage=new SessionStorage();
-        $prodct=new Product();
-        $productData=$prodct->findById(9);
+
+        $productData=Product::find(9);
 
         $session_storage->add($productData,1);
         $session_data=$session_storage->getAll();

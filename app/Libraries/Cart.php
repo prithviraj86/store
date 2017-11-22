@@ -55,10 +55,10 @@ class Cart
 
     }
 
-    public  function clearSession()
-    {
-        return $this->storage->clear();
-    }
+//    public  function clearSession()
+//    {
+//        return $this->storage->clear();
+//    }
     //    public function updateOnlogin()
     //    {
     //
