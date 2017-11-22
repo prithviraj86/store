@@ -100,18 +100,21 @@ class CartController extends Controller
 
     private function isProduct($id)
     {
-        try
-        {
 
-            $product= Product::find($id);
+        $product= Product::find($id);
 
-        }
-        catch (Exception $e)
+        if($product)
         {
-            throwException($e->getMessage());
+            return $product;
         }
-        return $product;
+        else
+        {
+            throw new Exception('Product not found');
+        }
+
+
     }
+//These two functions after this line will be changed but currently we used them in or web pages
 
     public function setCart()
     {
@@ -120,7 +123,7 @@ class CartController extends Controller
     public function updateOnlogin()
     {
         //dd($this->cart);
-        $sessionData=session('cart');//This Wrong code it's temporary~
+        $sessionData=session('cart');//This is a Wrong code and it is  temporary~
         foreach($sessionData as $value)
         {
             $product=$this->isProduct($value['product_id']);

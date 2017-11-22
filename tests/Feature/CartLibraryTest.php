@@ -143,18 +143,16 @@ class CartLibraryTest extends TestCase
 }
 //PHPUnit 6.4.3 by Sebastian Bergmann and contributors.
 //
-//......E.................                                          24 / 24 (100%)
+//..........................F                                       27 / 27 (100%)
 //
-//Time: 1.45 seconds, Memory: 12.00MB
+//Time: 1.72 seconds, Memory: 16.00MB
 //
-//There was 1 error:
+//There was 1 failure:
 //
-//1) Tests\Feature\CartLibraryTest::testGetAllWithLogin
-//Illuminate\Database\Eloquent\ModelNotFoundException: No query results for model [App\Models\Product] 12
+//1) Tests\Unit\CartControllerTest::testStoreAfterlogin
+//Failed asserting that 500 matches expected 200.
 //
-//                                                                          E:\xampp\htdocs\store\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:329
-//E:\xampp\htdocs\store\app\Models\Product.php:35
-//E:\xampp\htdocs\store\tests\Feature\CartLibraryTest.php:129
+//E:\xampp\htdocs\store\tests\Unit\CartControllerTest.php:34
 //
-//ERRORS!
-//    Tests: 24, Assertions: 37, Errors: 1.
+//FAILURES!
+//Tests: 27, Assertions: 42, Failures: 1.

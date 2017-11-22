@@ -83,8 +83,15 @@ class ProductController extends Controller
     public function show(Product $product, Request $request)
     {
         $productdata=Product::find($request->id);
+        if($productdata)
+        {
+            return view('products.show',compact('productdata'));
+        }
+        else
+        {
+            throw new \Exception('Product not found');
+        }
 
-        return view('products.show',compact('productdata'));
     }
 
     /**

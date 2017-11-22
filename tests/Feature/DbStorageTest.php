@@ -26,11 +26,11 @@ class DbStorageTest extends TestCase
         $this->user=User::find(1);
         $this->cart=new Cart();
         $this->dbstorage=new DBStorage();
-        $this->dbstorage->setModel($this->cart,$this->user);
+        $this->dbstorage->setModel($this->user);
     }
     public function testSetmodel()
     {
-        $this->assertEquals(1,$this->dbstorage->setModel($this->cart, $this->user));
+        $this->assertEquals(1,$this->dbstorage->setModel($this->user));
     }
     public function testAddExistesProductWithQuantityOne()
     {

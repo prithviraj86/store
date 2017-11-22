@@ -16,8 +16,7 @@ class RegisterTest extends DuskTestCase
     public function testRegister()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/')
-                    ->clickLink('Register')
+            $browser->visit('/register')
                     ->assertSee('Register')
                     ->value('#name','mohan kumar')
                     ->value('#email','mohan@gmail.com')
@@ -27,6 +26,7 @@ class RegisterTest extends DuskTestCase
                     ->assertPathIs('/')
                     ->assertSee('STORE')
             ;
+
         });
     }
 }

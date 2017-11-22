@@ -31,8 +31,7 @@ class CartControllerTest extends TestCase
                 'product_id'=>8
 
             ));
-        $response->assertStatus(500)
-            ->assertRedirect('/cart');
+        $this->assertEquals(200,$response->getStatusCode());
 
 
     }

@@ -13,36 +13,36 @@ class DBStorage implements StorageInterface
 
     private $model;
 
-    public function setModel(Cart $cart,User $user)
+    public function setModel(User $user)
     {
-        $this->model=$cart;
-        $this->model->setUserId($user->id);
+
+        Cart::setUserId($user->id);
         return $user->id;
     }
 
     public function add(Product $product,int $quntity=0)
     {
 
-        return $this->model->add($product,$quntity);
+        return Cart::add($product,$quntity);
     }
 
     public function decreseQuantity(Product $product)
     {
-        return $this->model->decreseQuantity($product->id);
+        return Cart::decreseQuantity($product->id);
     }
 
     public function remove(Product $product)
     {
-        return $this->model->remove($product->id);
+        return Cart::remove($product->id);
     }
 
     public function clear()
     {
-        return $this->model->clear();
+        return Cart::clear();
     }
 
     public function getAll()
     {
-        return $this->model->getAll();
+        return Cart::getAll();
     }
 }
