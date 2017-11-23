@@ -8,15 +8,17 @@ use App\Models\Product;
 interface StorageInterface
 {
 
-    public function add(Product $product,int $quantity=0);
+    public function set(Product $product,int $quantity=0);
 
     public function remove(Product $product);
+
+    public function getQuantity(Product $product);
 
     public function getAll();
 
     public function clear();
 
-    public function decreseQuantity(Product $product);
+
 
 
 }

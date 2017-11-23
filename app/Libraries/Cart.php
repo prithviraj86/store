@@ -6,7 +6,7 @@ use App\Libraries\StorageInterface;
 use Illuminate\Http\Request;
 
 
-
+//all cart logic.
 class Cart
 {
 
@@ -22,9 +22,31 @@ class Cart
 
     public function add(Product $product,int $quantity)
     {
+         $currentQuantity = $this->storage->getQuantity($product);
 
-         return $this->storage->add($product,$quantity);
+         if(!$currentQuantity)
+         {
+             $currentQuantity=0;
+         }
 
+         $currentQuantity+=$quantity;
+
+         return $this->storage->set($product,$currentQuantity);
+
+    }
+
+    public function sub(Product $product)
+    {
+        $currentQauntity = $this->storage->getQuantity($product);
+        $currentQauntity--;
+
+        if($currentQauntity <= 0){
+            $this->storage->remove($product);
+        }
+        else
+        {
+            $this->storage->set($product, $currentQauntity);
+        }
 
     }
     public function remove(Product $product)
@@ -48,13 +70,22 @@ class Cart
     }
 
 
-    public function decreseQuantity(Product $product)
+    public function isProduct($id)
     {
 
-        return $this->storage->decreseQuantity($product);
+        $product= Product::find($id);
+
+        if($product)
+        {
+            return $product;
+        }
+        else
+        {
+            throw new \Exception('Product not found');
+        }
+
 
     }
-
 //    public  function clearSession()
 //    {
 //        return $this->storage->clear();

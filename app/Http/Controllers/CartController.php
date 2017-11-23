@@ -33,10 +33,6 @@ class CartController extends Controller
             return $next($request);
         });
 
-
-//
-
-
     }
 
     public function index()
@@ -51,10 +47,10 @@ class CartController extends Controller
 
 
 
-        $product=$this->isProduct($request->product_id);
+        $product=$this->cart->isProduct($request->product_id);
 
         $result=$this->cart->add($product,$request->quantity);
-
+        // this condition is for web only
         if($result)
         {
           return redirect('/cart');
@@ -70,9 +66,10 @@ class CartController extends Controller
     public function destroy(Request $request)
     {
 
-        $product=$this->isProduct($request->product_id);
-        $result=$this->cart->remove($product);
+        $product=$this->cart->isProduct($request->product_id);
 
+        $result=$this->cart->remove($product);
+        // this condition is for web only
         if($result)
         {
             return redirect('/cart');
@@ -93,27 +90,12 @@ class CartController extends Controller
     {
         //
 
-        $product=$this->isProduct($request->product_id);
-        return $this->cart->decreseQuantity($product);
+        $product=$this->cart->isProduct($request->product_id);
+        return $this->cart->sub($product);
     }
 
 
-    private function isProduct($id)
-    {
 
-        $product= Product::find($id);
-
-        if($product)
-        {
-            return $product;
-        }
-        else
-        {
-            throw new Exception('Product not found');
-        }
-
-
-    }
 //These two functions after this line will be changed but currently we used them in or web pages
 
     public function setCart()
@@ -126,7 +108,7 @@ class CartController extends Controller
         $sessionData=session('cart');//This is a Wrong code and it is  temporary~
         foreach($sessionData as $value)
         {
-            $product=$this->isProduct($value['product_id']);
+            $product=$this->cart->isProduct($value['product_id']);
             //echo $value['quantity'];die;
 
             $result=$this->cart->add($product,$value['quantity']);

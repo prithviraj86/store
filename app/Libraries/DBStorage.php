@@ -6,43 +6,73 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Libraries\StorageInterface;
 use App\Models\Product;
-
+//Interaction two
 
 class DBStorage implements StorageInterface
 {
 
-    private $model;
+    private $user;//static
 
-    public function setModel(User $user)
+    public function setUser(User $user)
     {
 
-        Cart::setUserId($user->id);
-        return $user->id;
+        $this->user=$user;
+
+    }
+    public function getUser()
+    {
+        return $this->user;
     }
 
-    public function add(Product $product,int $quntity=0)
+    public function getQuantity(Product $product)
     {
+        $cart=Cart::findByProduct($product,$this->user);
 
-        return Cart::add($product,$quntity);
+        if(isset($cart))
+        {
+            return $cart->quantity;
+        }
+        else
+        {
+            return false;
+        }
+
+
     }
 
-    public function decreseQuantity(Product $product)
+
+    public function set(Product $product,int $quantity=0)
     {
-        return Cart::decreseQuantity($product->id);
+
+        $cart = Cart::findByProduct($product,$this->user);
+        if(!$cart){
+            $cart = new Cart();
+            $cart->product_id = $product->id;
+            $cart->customer_id = $this->user->id;
+        }
+        $cart->quantity = $quantity;
+        $cart->save();
+        return true;
+
     }
 
     public function remove(Product $product)
     {
-        return Cart::remove($product->id);
+        return Cart::remove($product,$this->user);
     }
 
     public function clear()
     {
-        return Cart::clear();
+
+        return Cart::clear($this->user);
     }
 
     public function getAll()
     {
-        return Cart::getAll();
+
+        return Cart::getAll($this->user);
+//        return Cart::with('product' ,'product.productprice')
+//                    ->where('customer_id', '=', $this->user->id)
+//                    ->get()->toArray();
     }
 }

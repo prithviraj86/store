@@ -13,7 +13,7 @@ class CartStorageFactory
         if($user)
         {
             $storage=new DBStorage();
-            $storage->setModel($user);
+            $storage->setUser($user);
         }
         else
         {

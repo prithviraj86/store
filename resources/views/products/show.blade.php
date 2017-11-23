@@ -13,7 +13,7 @@
 
                 <h4 style="color:red;"> Not product found</h4>
 
-                @else if
+                @else
                 <div class="card">
 
                     <h2>{{$productdata->name}}</h2>
@@ -29,16 +29,14 @@
                     <label>Special Price:-</label>{{$productdata->productprice->special_price}}
 
                     </p>
-                        <?php
-                       // dd($productdata);die;
-                    ?>
+                        <?php// dd($productdata);die;?>
                         @if(isset($productdata->cart->cart_id) and $productdata->cart->cart_id!='')
                         <a href="/cart">
                             <input type="button" value="Go to cart" style="cursor: pointer;" class="btn btn-primary" name="gocart"/>
                         </a>
 
 
-                    @else
+                         @else
 
                         <form action="/cart/store" method="post">
                             {{ csrf_field() }}
@@ -49,7 +47,7 @@
                             <input type="submit" value="Add to cart" class="btn btn-primary" name="addcart"/>
                         </form>
 
-                    @endif
+                        @endif
 
                 </div>
                 @endif
