@@ -20,6 +20,9 @@ class CreateProductImagesTable extends Migration
             $table->string('small_image_link',50);
             $table->string('thumb_image_link',50);
             $table->string('type',10);
+            $table->foreign('product_id')
+                ->references('id')->on('products')
+                ->onDelete('cascade');
 
         });
     }

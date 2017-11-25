@@ -53,7 +53,7 @@
                                     <label for="manufacturer" class="col-md-3 control-label">Upload Image</label>
 
                                     <div class="col-md-9">
-                                        <input id="photo" type="file" class="form-control" name="photo" value="{{ old('photo') }}" required>
+                                        <input id="photo" type="file" class="form-control" name="photo" value="{{ old('photo') }}" >
 
 
                                     </div>

@@ -7,6 +7,7 @@ use App\Models\Product;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -19,6 +20,20 @@ class ProductController extends Controller
      * This controller Have wrong Code it will be fixed when CartController Completed
      * This controller Have wrong Code it will be fixed when CartController Completed
      */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $user=Auth::user();
+            //echo $user->is_admin;die;
+            if(isset($user) and $user->is_admin==0)
+            {
+                return redirect('/');
+
+            }
+            return $next($request);
+        });
+    }
+
     public function index()
     {
 

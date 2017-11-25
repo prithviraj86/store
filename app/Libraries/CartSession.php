@@ -1,5 +1,5 @@
 <?php
-namespace App\Helpers;
+namespace App\Libraries;
 
 class CartSession
 {
@@ -35,4 +35,3 @@ class CartSession
 
 
 }
-?>

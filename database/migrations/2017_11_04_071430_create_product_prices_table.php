@@ -18,6 +18,11 @@ class CreateProductPricesTable extends Migration
             $table->integer('product_id');
             $table->integer('price');
             $table->integer('special_price');
+
+            $table->foreign('product_id')
+                ->references('id')->on('products')
+                ->onDelete('cascade');
+
         });
     }
 

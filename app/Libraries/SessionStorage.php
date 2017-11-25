@@ -3,7 +3,7 @@ namespace App\Libraries;
 
 use App\Libraries\StorageInterface;
 use App\Models\Product;
-use App\Helpers\CartSession;
+use App\Libraries\CartSession;
 //Interaction one.
 
 class SessionStorage implements StorageInterface
@@ -20,6 +20,7 @@ class SessionStorage implements StorageInterface
     public function getQuantity(Product $product)
     {
         $quantity=CartSession::findByKey($this->cart_name.'.'.$product->id.'.quantity');
+
         if($quantity)
         {
             return $quantity;
@@ -59,5 +60,3 @@ class SessionStorage implements StorageInterface
     }
 
 }
-
-?>

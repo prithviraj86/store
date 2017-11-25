@@ -19,10 +19,7 @@ class DBStorage implements StorageInterface
         $this->user=$user;
 
     }
-    public function getUser()
-    {
-        return $this->user;
-    }
+
 
     public function getQuantity(Product $product)
     {
@@ -51,6 +48,7 @@ class DBStorage implements StorageInterface
             $cart->customer_id = $this->user->id;
         }
         $cart->quantity = $quantity;
+        //$cart->validate($cart);
         $cart->save();
         return true;
 
@@ -71,8 +69,19 @@ class DBStorage implements StorageInterface
     {
 
         return Cart::getAll($this->user);
-//        return Cart::with('product' ,'product.productprice')
-//                    ->where('customer_id', '=', $this->user->id)
-//                    ->get()->toArray();
+//        return Cart::where('customer_id', '=', $this->user->id)
+//            ->with('product.productprice')
+//            ->get(['id','product_id'])->toArray();
+//        return Cart::where('customer_id', '=', $this->user->id)
+//                    ->with(['product' => function($query){
+//                        $query->with(['productprice'=>function($detail){
+//                            // selecting fields from authordetail table
+//                            $detail->select('product_id','price');
+//                        }]);
+//                        // selecting fields from author table
+//                        $query->select('id','name');
+//                    }
+//                    ])
+//                    ->get(['id','product_id'])->toArray();
     }
 }

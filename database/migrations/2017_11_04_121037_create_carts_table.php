@@ -19,6 +19,11 @@ class CreateCartsTable extends Migration
             $table->integer('customer_id');
             $table->integer('quantity');
             $table->timestamps();
+
+            $table->foreign('product_id')
+                ->references('id')->on('products')
+                ->onDelete('cascade');
+
         });
     }
 

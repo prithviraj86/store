@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<?php dd($productdata->ProductCategory);die; ?>
         <div class="container">
 
             <div class="row">
@@ -16,17 +17,17 @@
                 @else
                 <div class="card">
 
-                    <h2>{{$productdata->name}}</h2>
+                    <h2>{{$productdata->productcategory->product->name}}</h2>
 
                     <p>
                     <h4>Description</h4>
-                    <p>{{$productdata->productdetail->description}}</p>
+                    <p>{{$productdata->product->productdetail->description}}</p>
                     <ul>
-                        <li>{{$productdata->productdetail->manufacturer}}</li>
-                        <li>{{$productdata->productdetail->weight}}</li>
+                        <li>{{$productdata->product->productdetail->manufacturer}}</li>
+                        <li>{{$productdata->product->productdetail->weight}}</li>
                     </ul>
-                    <label>Price:-</label><s>{{$productdata->productprice->price}}</s>
-                    <label>Special Price:-</label>{{$productdata->productprice->special_price}}
+                    <label>Price:-</label><s>{{$productdata->product->productprice->price}}</s>
+                    <label>Special Price:-</label>{{$productdata->product->productprice->special_price}}
 
                     </p>
                         <?php// dd($productdata);die;?>

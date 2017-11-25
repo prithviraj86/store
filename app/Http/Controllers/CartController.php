@@ -23,7 +23,7 @@ class CartController extends Controller
 
     public function __construct()
     {
-
+        //parent::__construct();
         $this->middleware(function ($request, $next) {
 
             $user=Auth::user();
@@ -91,6 +91,7 @@ class CartController extends Controller
         //
 
         $product=$this->cart->isProduct($request->product_id);
+
         return $this->cart->sub($product);
     }
 
