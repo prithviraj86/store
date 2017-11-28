@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<?php dd($productdata->ProductCategory);die; ?>
+<?php //dd($productdata);die; ?>
         <div class="container">
 
             <div class="row">
@@ -15,29 +15,29 @@
                 <h4 style="color:red;"> Not product found</h4>
 
                 @else
-                <div class="card">
+                <div class="col-md-5">
+                    <a href="/{{encrypt($productdata->productcategory->category->id)}}"> {{$productdata->productcategory->category->name}}></a>
+                    <br>
+                    <img src="{{ asset("images/proimages/".$productdata->id.".jpeg")}}">
+                </div>
+                <div class="col-lg-1">
 
-                    <h2>{{$productdata->productcategory->product->name}}</h2>
+                </div>
+                <div class="col-md-6">
+
+                    <h2>{{$productdata->name}}</h2>
 
                     <p>
                     <h4>Description</h4>
-                    <p>{{$productdata->product->productdetail->description}}</p>
+                    <p>{{$productdata->productdetail->description}}</p>
                     <ul>
-                        <li>{{$productdata->product->productdetail->manufacturer}}</li>
-                        <li>{{$productdata->product->productdetail->weight}}</li>
+                        <li>{{$productdata->productdetail->manufacturer}}</li>
+                        <li>{{$productdata->productdetail->weight}}</li>
                     </ul>
-                    <label>Price:-</label><s>{{$productdata->product->productprice->price}}</s>
-                    <label>Special Price:-</label>{{$productdata->product->productprice->special_price}}
+                    <label>Price:-</label><s>{{$productdata->productprice->price}}</s>
+                    <label>Special Price:-</label>{{$productdata->productprice->special_price}}
 
                     </p>
-                        <?php// dd($productdata);die;?>
-                        @if(isset($productdata->cart->cart_id) and $productdata->cart->cart_id!='')
-                        <a href="/cart">
-                            <input type="button" value="Go to cart" style="cursor: pointer;" class="btn btn-primary" name="gocart"/>
-                        </a>
-
-
-                         @else
 
                         <form action="/cart/store" method="post">
                             {{ csrf_field() }}
@@ -48,7 +48,6 @@
                             <input type="submit" value="Add to cart" class="btn btn-primary" name="addcart"/>
                         </form>
 
-                        @endif
 
                 </div>
                 @endif

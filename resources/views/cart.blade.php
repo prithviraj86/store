@@ -6,7 +6,7 @@
     <div class="container">
         <?php //dd($cartdata);die;//echo count($cartdata); ?>
 
-        @if((isset($cartdata) and count($cartdata)==0) or (!isset($cartdata)))
+        @if(isset($cartdata) and $cartdata==false)
             <h3>Your Shopping Cart is empty.</h3>
             <p>
                 Your Shopping Cart lives to serve. Give it purpose--fill it with books, CDs, videos, DVDs, electronics, and more. If you already have an account, Sign In to see your Cart.

@@ -106,6 +106,7 @@ class CartController extends Controller
     public function updateOnlogin()
     {
         //dd($this->cart);
+        $result=false;
         $sessionData=session('cart');//This is a Wrong code and it is  temporary~
         foreach($sessionData as $value)
         {
@@ -117,6 +118,11 @@ class CartController extends Controller
 
         if($result)
         {
+            return redirect('/');
+        }
+        else
+        {
+            session()->forget('cart');
             return redirect('/');
         }
 

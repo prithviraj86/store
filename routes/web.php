@@ -12,10 +12,14 @@
 */
 
 Route::get('/', 'ProductCategoryController@index')->name('home');
-Route::get('/product/show/{id}', 'ProductController@show');
-Route::get('/product/create', 'ProductController@create')->middleware('auth');
-Route::post('/product/create', 'ProductController@store')->middleware('auth');
 
+Route::get('/product', 'ProductController@index');
+Route::get('/product/show/{id}', 'ProductController@show');
+Route::get('/product/create', 'ProductController@create');
+Route::post('/product/create', 'ProductController@store');
+Route::get('/product/edit/{id}', 'ProductController@edit');
+Route::get('/product/delete/{id}', 'ProductController@destroy');
+Route::post('/product/update', 'ProductController@update');
 Route::get('/cart', 'CartController@index');
 Route::post('/cart/store', 'CartController@store');
 Route::post('/cart/update', 'CartController@update');
@@ -29,7 +33,9 @@ Route::get('/category/delete/{id}', 'CategoryController@destroy');
 
 Route::post('/category/store', 'CategoryController@store');
 Route::post('/category/update', 'CategoryController@update');
-
 Auth::routes();
+Route::get('/{id}', 'ProductCategoryController@productByCategory');
+
+
 
 

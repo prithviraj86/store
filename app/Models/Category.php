@@ -9,6 +9,9 @@ class Category extends Model
     //
     public $timestamps = false;
 
-
+    public function productCategory()
+    {
+        return $this->hasOne(ProductCategory::class);
+    }
 
 }

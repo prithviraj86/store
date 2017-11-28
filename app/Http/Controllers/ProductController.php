@@ -3,101 +3,67 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Product;
-
-
+use App\Models\ProductCategory;
+use App\Repositories\Product\ProductInterface;
+use App\Repositories\Product\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class ProductController extends Controller
 {
-    /**
-     * This controller Have wrong Code it will be fixed when CartController Completed
-     *This controller Have wrong Code it will be fixed when CartController Completed
-     * This controller Have wrong Code it will be fixed when CartController Completed
-     * This controller Have wrong Code it will be fixed when CartController Completed
-     * This controller Have wrong Code it will be fixed when CartController Completed
-     * This controller Have wrong Code it will be fixed when CartController Completed
-     * This controller Have wrong Code it will be fixed when CartController Completed
-     */
-    public function __construct()
+
+    private $user;
+    private $product;
+
+    public function __construct(ProductInterface $product)
     {
+        $this->middleware('auth')->except('show');
         $this->middleware(function ($request, $next) {
-            $user=Auth::user();
-            //echo $user->is_admin;die;
-            if(isset($user) and $user->is_admin==0)
+            $this->user=Auth::user();
+
+            if(isset($this->user) and $this->user->is_admin==0 and Route::current()->uri!="product/show/{id}")
             {
                 return redirect('/');
 
             }
             return $next($request);
         });
+        $this->product=$product;
     }
+
 
     public function index()
     {
-
-        $products=Product::all();
-
-
-        return view('index',compact('products'));
+        $productdata=$this->product->all();
+        return view('products.list', compact('productdata'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
-        if(auth()->user()->is_admin != 1) return  redirect('/');
+
         return view('products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Product $product,Request $request)
+    public function store(Request $request)
     {
-        if(auth()->user()->is_admin != 1) return  redirect('/');
-        $this->validate(request(),[
-            'name'=>'required',
-            'price'=>'required|integer',
-            'sprice'=>'required|integer',
-            'quantity'=>'required|integer',
-        ]);
-        //$extension=$request->file('photo')->extension();
-
-        //$request->file('photo')->storeAs('images',$filename,'public');
-
-
-        $product->name=request('name');
-        $product->admin_id=auth()->user()->id;
-        $product->addProduct($product);
-        if($product->id=='')
+        $product=$this->product->add($request,$this->user);
+        if(!$product)
         {
-            redirect('product/create');
+            return redirect('product');
         }
         else
         {
-            redirect()->home();
+            return redirect()->home();
         }
-        return $product->id;
+
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product, Request $request)
+
+    public function show(Request $request)
     {
-        $productdata=Product::find($request->id);
+        $productdata=$this->product->find($request);
         if($productdata)
         {
             return view('products.show',compact('productdata'));
@@ -109,37 +75,40 @@ class ProductController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function edit(Request $request)
     {
         //
+        $product=$this->product->find($request);
+
+        return view('products.edit',compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    public function update(Request $request)
     {
         //
+        $product=$this->product->update($request);
+        if($product)
+        {
+            return redirect('product');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+
+    public function destroy(Request $request)
     {
         //
+        $result=$this->product->remove($request);
+        if($result)
+        {
+            return redirect('product');
+        }
+        else
+        {
+            return Redirect::back()->withErrors(['Product not removed']);
+        }
     }
+
+
 }

@@ -130,7 +130,8 @@
                         @else
 
                             @if(Auth::user()->is_admin==1)
-                                <li><a href="/product/create">Add Product</a></li>
+                                <li><a href="/category">Category</a></li>
+                                <li><a href="/product">Product</a></li>
                             @endif
                             <li><a href="/cart">Cart</a></li>
                             <li class="dropdown">

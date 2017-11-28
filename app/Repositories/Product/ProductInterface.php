@@ -1,13 +1,16 @@
 <?php
 namespace App\Repositories\Product;
 
+use App\Models\User;
+use Illuminate\Http\Request;
+
 interface ProductInterface
 {
 
-    public function add(array $data);
+    public function add(Request $request,User $user);
     public function all();
-    public function find(int $id);
-    public function update(int $id,array$data);
-    public function remove(int $id);
+    public function find(Request $request);
+    public function update(Request $request);
+    public function remove(Request $request);
 
 }
