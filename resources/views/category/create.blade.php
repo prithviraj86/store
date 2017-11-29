@@ -20,12 +20,14 @@
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                <label for="name" class="col-md-1 control-label text-left">Name</label>
+                            <div class="form-row">
+                            <label for="name" class="col-md-1 control-label">Name</label>
+                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} col-md-6">
 
-                                <div class="col-md-7">
+
+                                <div class="">
                                     @if(isset($editdata) and count($editdata)>0)
-                                        <input id="id" type="hidden" class="form-control" name="id" value="{{ $editdata['id'] }}" required autofocus>
+                                        <input id="id" type="hidden"  name="id" value="{{ $editdata['id'] }}" required autofocus>
                                         <input id="name" type="text" class="form-control" name="name" value="{{ $editdata['name'] }}" required autofocus>
                                     @else
                                         <input id="name" type="text" class="form-control" name="name" value="" required autofocus>
@@ -38,17 +40,22 @@
                                             </span>
                                     @endif
                                 </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        Save
-                                    </button>
-                                </div>
+                                <br>
+                                   @if(isset($editdata) and count($editdata)>0)
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    @else
+                                        <button type="submit" class="btn btn-primary">Save</button>
+
+                                    @endif
+
+
+                            </div>
                             </div>
 
 
 
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <table class="table">
                                 <thead class="thead-dark">
                                 <tr>
@@ -64,7 +71,7 @@
                                     <tr>
                                         <th scope="row">{{$data['id']}}</th>
                                         <td>{{$data['name']}}</td>
-                                        <td style="width: 150px;">
+                                        <td style="width: 200px;">
                                            <a href="/category/edit/{{$data['id']}}"><button class="btn btn-success" type="button">Edit</button></a>
                                            <a href="/category/delete/{{$data['id']}}"> <button class="btn btn-danger" type="button">Delete</button></a>
                                         </td>

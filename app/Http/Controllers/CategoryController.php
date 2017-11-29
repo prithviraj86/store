@@ -57,7 +57,7 @@ class CategoryController extends Controller
     public  function edit(Request $request)
     {
         $catdata=$this->category->all();
-        $editdata=$this->category->find($request->id);
+        $editdata=$this->category->find($request);
         //print_r($editdata);die;
         return View::make('category.create')->with(array('catdata'=>$catdata,'editdata'=>$editdata));
     }

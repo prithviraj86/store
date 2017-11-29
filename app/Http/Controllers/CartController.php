@@ -44,9 +44,6 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
-
-
-
         $product=$this->cart->isProduct($request->product_id);
 
         $result=$this->cart->add($product,$request->quantity);

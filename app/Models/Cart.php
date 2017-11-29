@@ -25,7 +25,7 @@ class Cart extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->select(['id', 'name']);
 
     }
 
@@ -39,12 +39,12 @@ class Cart extends Model
     public static function getAll(User $user)
     {
 
-
+//       return static ::with('product','product.productprice')->where('customer_id','=',$user->id)
+//                ->get()->toArray();
         return static::Where('customer_id','=',$user->id)
                 ->selectRaw('carts.product_id,products.name,product_prices.price,carts.quantity,sum(carts.quantity*product_prices.price) as total_price')
                 ->join('products','carts.product_id','=','products.id')
                 ->join('product_prices','product_prices.product_id','=','products.id')
-
                 ->groupBy('carts.product_id','products.name','carts.quantity','product_prices.price')
                 ->get()->toArray();
 

@@ -70,16 +70,21 @@ class DBStorage implements StorageInterface
     {
 
         return Cart::getAll($this->user);
+
 //        return Cart::where('customer_id', '=', $this->user->id)
-//            ->with('product.productprice')
+//            ->with('product:id,name','product.productprice:product_id,price')
+//            ->addSelect('product:name')
 //            ->get(['id','product_id'])->toArray();
-//        return Cart::where('customer_id', '=', $this->user->id)
+//       return Cart::where('customer_id', '=', $this->user->id)
 //                    ->with(['product' => function($query){
 //                        $query->with(['productprice'=>function($detail){
 //                            // selecting fields from authordetail table
+//
 //                            $detail->select('product_id','price');
+//
 //                        }]);
 //                        // selecting fields from author table
+//
 //                        $query->select('id','name');
 //                    }
 //                    ])

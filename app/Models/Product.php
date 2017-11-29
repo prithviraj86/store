@@ -20,7 +20,7 @@ class Product extends Model
     }
     public function productPrice()
     {
-        return $this->hasOne(ProductPrice::class);
+        return $this->hasOne(ProductPrice::class)->select(['product_id', 'price']);
     }
     public function productImage()
     {
