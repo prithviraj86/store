@@ -16,23 +16,32 @@
         <div class="container">
             <h2 class="title ">Product List</h2>
             <hr>
-            <div class="row panel panel-default">
+            <div class="row">
                 @foreach($productdata as $value)
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card">
+                        <div  class="card-img-top text-center">
+                        <img src="<?php echo asset("images/proimages/".$value->product->id.".jpeg")?>" alt="Product image cap">
+                        </div>
+                        <div class="card-block">
+                            <h6 class="card-title">{{ $value->product->name }}</h6>
+                            <br>
 
-                <div class="card" style="border-radius: 5px;border: 1px solid silver;padding: 10px; height: auto;justify-content: inherit;align-items: inherit;">
-                    <img src="<?php echo asset("images/proimages/".$value->product->id.".jpeg")?>" alt="Product image cap" class="img-thumbnail rounded mx-auto d-block" style="display:block;width:100%;left: 0;right: 0;" >
-                    <h4>{{ $value->product->name }}</h4>
-                    <br>
+                            <p class="card-text">Price:-<s>{{ $value->product->productprice->price }}</s></p>
+                            <p class="card-text">Special Price:-{{ $value->product->productprice->special_price }}</p>
 
-                    <p class="card-text">Price:-<s>{{ $value->product->productprice->price }}</s></p>
-                    <p class="card-text">Special Price:-{{ $value->product->productprice->special_price }}</p>
-                    <a href="/product/show/{{$value->product->id}}"  ><button style="cursor: pointer;"  class="btn btn-primary">Buy</button></a>
+                        </div>
+                        <a href="/product/show/{{$value->product->id}}"  class="text-center"><button class="btn btn-primary">Buy</button></a>
+                    </div>
                 </div>
 
 
                 @endforeach
 
             </div>
+            <nav class="Page navigation text-center" >
+                {{ $productdata->links() }}
+            </nav>
 
         </div>
     </div>

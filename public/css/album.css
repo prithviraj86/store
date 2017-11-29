@@ -34,14 +34,16 @@ body {
 
 .card {
     float: left;
-    width: 33.333%;
+    width: 100%;
     padding: .75rem;
     margin-bottom: 2rem;
-    border: 0;
+    margin-left: 8px;
+    border: 1;
 }
 
 .card > img {
     margin-bottom: .75rem;
+    ;
 }
 
 .card-text {
@@ -55,4 +57,14 @@ footer {
 
 footer p {
     margin-bottom: .25rem;
+}
+.card-img-top
+{
+    height: 180px;
+}
+.card-img-top > img
+{
+    width: auto;
+    max-width: 100%;
+    height: 100%;
 }

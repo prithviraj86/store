@@ -43,7 +43,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $result=$this->category->add($request->name);
+        $result=$this->category->add($request);
 
         if($result){
             return redirect('/category');

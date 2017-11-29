@@ -10,13 +10,15 @@ namespace App\Repositories\Category;
 
 use App\Repositories\Category\CategoryInterface;
 use App\Models\Category;
+use Illuminate\Http\Request;
 
 class CategoryRepository implements CategoryInterface
 {
 
 
-    public function add(string $name)
+    public function add(Request $request)
     {
+        $name=strtolower($request->name);
         $category=Category::Where('name','=',$name)->get()->toArray();
         if(count($category)>0){
             return false;
@@ -34,22 +36,22 @@ class CategoryRepository implements CategoryInterface
         return Category::all()->toArray();
     }
 
-    public function find(int $id)
+    public function find(Request $request)
     {
-        return Category::find($id)->toArray();
+        return Category::find($request->id)->toArray();
     }
 
-    public function update(int $id,string $name)
+    public function update(Request $request)
     {
-        $category=Category::find($id);
-        $category->name=$name;
+        $category=Category::find($request->id);
+        $category->name=strtolower($request->name);
         return $category->save();
     }
 
-    public function remove(int $id)
+    public function remove(Request $request)
     {
 
-        return Category::destroy($id);
+        return Category::destroy($request->id);
 
     }
 }

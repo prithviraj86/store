@@ -31,6 +31,7 @@ class SessionStorage implements StorageInterface
         }
 
     }
+
     public function set(Product $product,int $quantity=0)
     {
 

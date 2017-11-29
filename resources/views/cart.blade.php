@@ -18,14 +18,15 @@
             </a>
         @else
         <h3>Cart Items</h3>
+            <br>
         @foreach($cartdata as $value)
 
 
 
 
-        <div class="row" id="product_{{$value['product_id']}}">
+        <div class="row" id="product_{{$value['product_id']}}" style="border-bottom: solid silver 1px;padding-bottom: 10px;margin-bottom: 20px;">
             <div class="col-md-2">
-                <img src="images/" style="width: 180px; height: 200px;">
+                <img src="<?php echo asset("images/proimages/".$value['product_id'].".jpeg")?>" style="width: 180px; height: 200px;">
             </div>
             <div class="col-md-7">
                 <h3>{{$value['name']}}</h3>
@@ -33,9 +34,9 @@
 
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-success glyphicon-minus pull-left" style="width: 30px;" onclick="return updatecart({{$value['product_id']}},this.value,'desc');"></button>
+                <button type="button" class="btn btn-success glyphicon-minus pull-left" style="width: 30px;" onclick="return updatecart({{$value['product_id']}},this.value,'desc');">-</button>
                 <label id="quantity" class="pull-left" style="margin-left: 10px; margin-right: 10px;">{{$value['quantity']}}</label>
-                <button type="button" class="btn btn-success glyphicon-plus pull-left" style="width: 30px;" onclick="return updatecart({{$value['product_id']}},this.value,'inc');"></button>
+                <button type="button" class="btn btn-success glyphicon-plus pull-left" style="width: 30px;" onclick="return updatecart({{$value['product_id']}},this.value,'inc');">+</button>
 
             </div>
             <div class="col-md-1">

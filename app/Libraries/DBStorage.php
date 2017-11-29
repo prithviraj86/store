@@ -42,6 +42,7 @@ class DBStorage implements StorageInterface
     {
 
         $cart = Cart::findByProduct($product,$this->user);
+
         if(!$cart){
             $cart = new Cart();
             $cart->product_id = $product->id;

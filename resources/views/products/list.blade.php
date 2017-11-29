@@ -47,7 +47,7 @@
                             <td>{{ $value['name'] }}</td>
                             <td>{{ $value['productprice']['price'] }}</td>
                             <td>{{$value['productdetail']['quantity']}}</td>
-                            <td>
+                            <td style="width: 200px;">
                                 <a href="/product/edit/{{ $value['id'] }}"><button class="btn btn-primary">Edit</button></a>
                                 <a href="/product/delete/{{ $value['id'] }}"><button class="btn btn-danger">Delete</button></a>
                             </td>
