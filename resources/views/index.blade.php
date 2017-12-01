@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <?php //dd($productdata);die; ?>
+    <?php //dd($productData);die; ?>
 <main role="main">
     <!--
     <section class="jumbotron text-center">
@@ -11,13 +11,13 @@
         </div>
     </section>
     -->
-    @if(count($productdata)>0)
+    @if(count($productData)>0)
     <div class="album text-muted">
         <div class="container">
             <h2 class="title ">Product List</h2>
             <hr>
             <div class="row">
-                @foreach($productdata as $value)
+                @foreach($productData as $value)
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card">
                         <div  class="card-img-top text-center">
@@ -31,7 +31,7 @@
                             <p class="card-text">Special Price:-{{ $value->product->productprice->special_price }}</p>
 
                         </div>
-                        <a href="/product/show/{{$value->product->id}}"  class="text-center"><button class="btn btn-primary">Buy</button></a>
+                        <a href="/product/show/{{ $value->product->id }}"  class="text-center"><button class="btn btn-primary">Buy</button></a>
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@
 
             </div>
             <nav class="Page navigation text-center" >
-                {{ $productdata->links() }}
+                {{ $productData->links() }}
             </nav>
 
         </div>

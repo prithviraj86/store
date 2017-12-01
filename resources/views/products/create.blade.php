@@ -50,14 +50,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="manufacturer" class="col-md-3 control-label">Upload Image</label>
+                                    <label for="category_id" class="col-md-3 control-label">Category</label>
 
                                     <div class="col-md-9">
-                                        <input id="photo" type="file" class="form-control" name="photo" value="{{ old('photo') }}" >
+                                        <select id="category_id" type="file" class="form-control" name="category_id[]" multiple>
+                                            @if(count($catData)>0)
+                                                @foreach($catData as $data)
+                                                    <option value="{{$data['id']}}">
+                                                        {{$data['name']}}
+                                                    </option>
+
+                                                @endforeach
+                                            @endif
+                                        </select>
 
 
                                     </div>
                                 </div>
+
                             </div>
                             <div class="col-md-6">
 
@@ -98,6 +108,15 @@
 
                                     <div class="col-md-9">
                                         <textarea class="form-control" name="description" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="manufacturer" class="col-md-3 control-label">Upload Image</label>
+
+                                    <div class="col-md-9">
+                                        <input id="photo" type="file" class="form-control" name="photo" value="{{ old('photo') }}" >
+
+
                                     </div>
                                 </div>
                             </div>

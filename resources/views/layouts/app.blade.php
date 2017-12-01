@@ -112,7 +112,7 @@
                     <!-- Left Side Of Navbar -->
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav justify-content-end">
+                    <ul class="nav navbar-nav justify-content-end conte">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>

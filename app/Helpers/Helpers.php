@@ -1,18 +1,18 @@
 <?php
-//use App\Helpers;
+use App\Helpers;
 //
-//if (! function_exists('gets')) {
-//    function gets($key)
-//    {
-//        return Helpers\Helper::gets($key);
-//    }
-//}
-//if (! function_exists('remove')) {
-//    function remove($key)
-//    {
-//        return Helpers\Helper::remove($key);
-//    }
-//}
+if (! function_exists('set_same_key')) {
+    function set_same_key($key,$array)
+    {
+        return Helpers\Helper::set_same_key($key,$array);
+    }
+}
+if (! function_exists('merge_array_sets')) {
+    function merge_array_sets($array1,$array2)
+    {
+        return Helpers\Helper::merge_array_sets($array1,$array2);
+    }
+}
 //if (! function_exists('put')) {
 //    function put($key,$data)
 //    {

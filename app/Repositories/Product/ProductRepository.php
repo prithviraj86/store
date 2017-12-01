@@ -6,33 +6,48 @@ use App\Models\ProductDetail;
 use App\Models\ProductImage;
 use App\Models\ProductPrice;
 use App\Models\User;
+use App\Repositories\ProductCategory\ProductCategoryInterface;
 use Illuminate\Http\Request;
 use App\Repositories\Product\ProductInterface;
 use App\Libraries\FileStorage;
 
 class ProductRepository implements ProductInterface
 {
+    private $productCategory;
+
+    public function __construct(ProductCategoryInterface $productCategory)
+    {
+        $this->productCategory=$productCategory;
+    }
+
     public function add(Request $request,User $user)
     {
+
+
+
         $product=new Product();
         $product->name=request('name');
         $product->admin_id=$user->id;
         $product->save();
 
-        $productdetail=new ProductDetail();
-        //$productdetail->manufacturer=
-        $productdetail->manufacturer=request('manufacturer');
-        $productdetail->quantity=request('quantity');
-        $productdetail->weight=request('weight');
-        $productdetail->description=request('description');
+        $product->productdetail()->create([
+            'manufacturer' => request('manufacturer'),
+            'quantity'=>request('quantity'),
+            'weight'=>request('weight'),
+            'description'=>request('description')
+        ]);
 
-        $product->productdetail()->save($productdetail);
-        $productprice=new ProductPrice();
-        $productprice->price=request('price');
-        $productprice->special_price=request('sprice');
-        $product->productprice()->save($productprice);
+        $product->productprice()->create([
+            'price'=>request('price'),
+            'special_price'=>request('sprice')
+        ]);
+
+
+
         FileStorage::uploadProduct($product,$request);
 
+
+        $this->productCategory->add($product,$request->category_id);
 
         return $product->id;
 

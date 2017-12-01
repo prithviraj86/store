@@ -33,6 +33,11 @@ Route::get('/category/delete/{id}', 'CategoryController@destroy');
 
 Route::post('/category/store', 'CategoryController@store');
 Route::post('/category/update', 'CategoryController@update');
+Route::get('/mailable', function () {
+
+
+    return new App\Mail\SignUp();
+});
 Auth::routes();
 Route::get('/{id}', 'ProductCategoryController@productByCategory');
 

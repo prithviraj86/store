@@ -11,30 +11,30 @@ use App\Models\Product;
 
 class ProductCategoryController extends Controller
 {
-    private $productcategory;
+    private $productCategory;
 
     //
-    public function __construct(ProductCategoryInterface $productcategory)
+    public function __construct(ProductCategoryInterface $productCategory)
     {
-        $this->productcategory=$productcategory;
+        $this->productCategory=$productCategory;
     }
 
 
     public function index()
     {
 
-        $productdata=$this->productcategory->all();
+        $productData=$this->productCategory->all();
 
         //dd($productdata);
-        return view('index',compact('productdata'));
+        return view('index',compact('productData'));
     }
 
     public function productByCategory(Request $request)
     {
         $category=decrypt($request->id);
-        $productdata=$this->productcategory->productByCategory($request);
+        $productData=$this->productCategory->productByCategory($request);
         //dd($productdata);
-        return view('index', compact('productdata','category'));
+        return view('index', compact('productData','category'));
 
     }
 }

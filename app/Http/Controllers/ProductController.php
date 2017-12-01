@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\ProductCategory;
+use App\Repositories\Category\CategoryInterface;
 use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepository;
 use Illuminate\Http\Request;
@@ -39,10 +40,10 @@ class ProductController extends Controller
         return view('products.list', compact('productdata'));
     }
 
-    public function create()
+    public function create(CategoryInterface $category)
     {
-
-        return view('products.create');
+        $catData=$category->all();
+        return view('products.create',compact('catData'));
     }
 
     public function store(Request $request)
